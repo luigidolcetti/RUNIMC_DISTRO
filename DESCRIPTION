@@ -1,0 +1,30 @@
+Package: RUNIMCTEMP
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Imports: raster, randomForest, MASS, methods, RColorBrewer, XML, digest, dplyr, exactextractr, imager, lwgeom, scales, sf, shiny, sp, keys, shinydashboard
+RoxygenNote: 7.1.1
+Roxygen: list(markdown = TRUE)
+Collate: 
+    'IMCstackOpen.R'
+    'IMCstackSave.R'
+    'checkDir.R'
+    'classDef_IMC_ChannelTable.R'
+    'classDef_IMC_RasterStack.R'
+    'classDef_IMC_RsCollection.R'
+    'classDef_IMC_StudyTable.R'
+    'classDef_IMC_Study.R'
+    'initObjectAttr.R'
+    'initStudy.R'
+    'loadTxtToStack.R'
+    'mdfObjectAttr.R'
+    'mthd_IMC_StudyTable.R'
+    'mthd_IMC_stack.R'
+    'util_cryonMessages.R'
