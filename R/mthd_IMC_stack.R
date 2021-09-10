@@ -1,7 +1,8 @@
-if (!isGeneric("IMC_stack")) {
-  setGeneric("IMC_stack", function(x, ...)
-    standardGeneric("IMC_stack"))
-}
+#'
+#' @export
+setGeneric("IMC_stack", function(x, ...)
+  standardGeneric("IMC_stack"))
+
 
 setMethod('IMC_stack',signature(x='list'),
           function(x,

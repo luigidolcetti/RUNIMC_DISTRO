@@ -1,4 +1,4 @@
-#' @importClassesFrom raster RasterStack
+
 #'
 IMC_RasterStack<-setClass('IMC_RasterStack',
                           contains = 'RasterStack',

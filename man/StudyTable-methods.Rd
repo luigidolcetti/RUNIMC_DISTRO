@@ -3,165 +3,165 @@
 \docType{methods}
 \name{studyTable}
 \alias{studyTable}
-\alias{studyTable,environment-method}
-\alias{StudyTable,environment-method}
+\alias{studyTable,IMC_Study-method}
+\alias{StudyTable,IMC_Study-method}
 \alias{st_uids}
-\alias{st_uids,environment-method}
-\alias{st_uids,environment}
+\alias{st_uids,IMC_Study-method}
+\alias{st_uids,IMC_Study}
 \alias{st_uids,IMC_StudyTable-method}
 \alias{st_uids,IMC_StudyTable}
 \alias{st_uids<-}
-\alias{st_uids<-,environment-method}
-\alias{st_uids<-,environment}
+\alias{st_uids<-,IMC_Study-method}
+\alias{st_uids<-,IMC_Study}
 \alias{st_uids<-,IMC_StudyTable-method}
 \alias{st_uids<-,IMC_StudyTable}
 \alias{st_folders}
-\alias{st_folders,environment-method}
-\alias{st_folders,environment}
+\alias{st_folders,IMC_Study-method}
+\alias{st_folders,IMC_Study}
 \alias{st_folders,IMC_StudyTable-method}
 \alias{st_folders,IMC_StudyTable}
 \alias{st_folders<-}
-\alias{st_folders<-,environment-method}
-\alias{st_folders<-,environment}
+\alias{st_folders<-,IMC_Study-method}
+\alias{st_folders<-,IMC_Study}
 \alias{st_folders<-,IMC_StudyTable-method}
 \alias{st_folders<-,IMC_StudyTable}
 \alias{st_files}
-\alias{st_files,environment-method}
-\alias{st_files,environment}
+\alias{st_files,IMC_Study-method}
+\alias{st_files,IMC_Study}
 \alias{st_files,IMC_StudyTable-method}
 \alias{st_files,IMC_StudyTable}
 \alias{st_files<-}
-\alias{st_files<-,environment-method}
-\alias{st_files<-,environment}
+\alias{st_files<-,IMC_Study-method}
+\alias{st_files<-,IMC_Study}
 \alias{st_files<-,IMC_StudyTable-method}
 \alias{st_files<-,IMC_StudyTable}
 \alias{st_samples}
-\alias{st_samples,environment-method}
-\alias{samples,environment}
+\alias{st_samples,IMC_Study-method}
+\alias{samples,IMC_Study}
 \alias{st_samples,IMC_StudyTable-method}
 \alias{IMCfile,IMC_StudyTable}
 \alias{st_samples<-}
-\alias{st_samples<-,environment-method}
-\alias{st_samples<-,environment}
+\alias{st_samples<-,IMC_Study-method}
+\alias{st_samples<-,IMC_Study}
 \alias{st_samples<-,IMC_StudyTable-method}
 \alias{st_samples<-,IMC_StudyTable}
 \alias{st_replicates}
-\alias{st_replicates,environment-method}
-\alias{st_replicates,environment}
+\alias{st_replicates,IMC_Study-method}
+\alias{st_replicates,IMC_Study}
 \alias{st_replicates,IMC_StudyTable-method}
 \alias{st_replicates,IMC_StudyTable}
 \alias{st_replicates<-}
-\alias{st_replicates<-,environment-method}
-\alias{st_replicates<-,environment}
+\alias{st_replicates<-,IMC_Study-method}
+\alias{st_replicates<-,IMC_Study}
 \alias{st_replicates<-,IMC_StudyTable-method}
 \alias{st_replicates<-,IMC_StudyTable}
 \alias{st_rois}
-\alias{st_rois,environment-method}
-\alias{st_rois,environment}
+\alias{st_rois,IMC_Study-method}
+\alias{st_rois,IMC_Study}
 \alias{st_rois,IMC_StudyTable-method}
 \alias{st_rois,IMC_StudyTable}
 \alias{st_rois<-}
-\alias{st_rois<-,environment-method}
-\alias{st_rois<-,environment}
+\alias{st_rois<-,IMC_Study-method}
+\alias{st_rois<-,IMC_Study}
 \alias{st_rois<-,IMC_StudyTable-method}
 \alias{st_rois<-,IMC_StudyTable}
 \alias{st_bioGroups}
-\alias{st_bioGroups,environment-method}
-\alias{st_bioGroups,environment}
+\alias{st_bioGroups,IMC_Study-method}
+\alias{st_bioGroups,IMC_Study}
 \alias{st_bioGroups,IMC_StudyTable-method}
 \alias{st_bioGroups,IMC_StudyTable}
 \alias{st_bioGroups<-}
-\alias{st_bioGroups<-,environment-method}
-\alias{st_bioGroups<-,environment}
+\alias{st_bioGroups<-,IMC_Study-method}
+\alias{st_bioGroups<-,IMC_Study}
 \alias{st_bioGroups<-,IMC_StudyTable-method}
 \alias{st_bioGroups<-,IMC_StudyTable}
 \title{Study Table content}
 \usage{
 studyTable(x, ...)
 
-\S4method{studyTable}{environment}(x, ...)
+\S4method{studyTable}{IMC_Study}(x, ...)
 
 st_uids(x, ...)
 
-\S4method{st_uids}{environment}(x, ...)
+\S4method{st_uids}{IMC_Study}(x, ...)
 
 \S4method{st_uids}{IMC_StudyTable}(x, ...)
 
 st_uids(x, ...) <- value
 
-\S4method{st_uids}{environment}(x, ...) <- value
+\S4method{st_uids}{IMC_Study}(x, ...) <- value
 
 \S4method{st_uids}{IMC_StudyTable}(x, ...) <- value
 
 st_folders(x, ...)
 
-\S4method{st_folders}{environment}(x, ...)
+\S4method{st_folders}{IMC_Study}(x, ...)
 
 \S4method{st_folders}{IMC_StudyTable}(x, ...)
 
 st_folders(x, ...) <- value
 
-\S4method{st_folders}{environment}(x, ...) <- value
+\S4method{st_folders}{IMC_Study}(x, ...) <- value
 
 \S4method{st_folders}{IMC_StudyTable}(x, ...) <- value
 
 st_files(x, ...)
 
-\S4method{st_files}{environment}(x, ...)
+\S4method{st_files}{IMC_Study}(x, ...)
 
 \S4method{st_files}{IMC_StudyTable}(x, ...)
 
 st_files(x, ...) <- value
 
-\S4method{st_files}{environment}(x, ...) <- value
+\S4method{st_files}{IMC_Study}(x, ...) <- value
 
 \S4method{st_files}{IMC_StudyTable}(x, ...) <- value
 
 st_samples(x, ...)
 
-\S4method{st_samples}{environment}(x, ...)
+\S4method{st_samples}{IMC_Study}(x, ...)
 
 \S4method{st_samples}{IMC_StudyTable}(x, ...)
 
 st_samples(x, ...) <- value
 
-\S4method{st_samples}{environment}(x, ...) <- value
+\S4method{st_samples}{IMC_Study}(x, ...) <- value
 
 \S4method{st_samples}{IMC_StudyTable}(x, ...) <- value
 
 st_replicates(x, ...)
 
-\S4method{st_replicates}{environment}(x, ...)
+\S4method{st_replicates}{IMC_Study}(x, ...)
 
 \S4method{st_replicates}{IMC_StudyTable}(x, ...)
 
 st_replicates(x, ...) <- value
 
-\S4method{st_replicates}{environment}(x, ...) <- value
+\S4method{st_replicates}{IMC_Study}(x, ...) <- value
 
 \S4method{st_replicates}{IMC_StudyTable}(x, ...) <- value
 
 st_rois(x, ...)
 
-\S4method{st_rois}{environment}(x, ...)
+\S4method{st_rois}{IMC_Study}(x, ...)
 
 \S4method{st_rois}{IMC_StudyTable}(x, ...)
 
 st_rois(x, ...) <- value
 
-\S4method{st_rois}{environment}(x, ...) <- value
+\S4method{st_rois}{IMC_Study}(x, ...) <- value
 
 \S4method{st_rois}{IMC_StudyTable}(x, ...) <- value
 
 st_bioGroups(x, ...)
 
-\S4method{st_bioGroups}{environment}(x, ...)
+\S4method{st_bioGroups}{IMC_Study}(x, ...)
 
 \S4method{st_bioGroups}{IMC_StudyTable}(x, ...)
 
 st_bioGroups(x, ...) <- value
 
-\S4method{st_bioGroups}{environment}(x, ...) <- value
+\S4method{st_bioGroups}{IMC_Study}(x, ...) <- value
 
 \S4method{st_bioGroups}{IMC_StudyTable}(x, ...) <- value
 }

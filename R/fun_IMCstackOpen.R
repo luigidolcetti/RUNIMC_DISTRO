@@ -7,7 +7,7 @@ IMCstackOpen<-function (fn_stackFile)
   tblStk <- utils::read.table(fn_stackFile, as.is = FALSE, strip.white = TRUE)
   tblStk<-as.vector(tblStk[,1])
   startInfo<-which(tblStk=='****info section****')
-  rstStk <- stack(as.vector(tblStk[1:(startInfo-1)]))
+  rstStk <- raster::stack(as.vector(tblStk[1:(startInfo-1)]))
   rstStk<-as(rstStk,'IMC_RasterStack')
   rstStk@uid<-tblStk[startInfo+1]
   rstStk@IMC_text_file<-tblStk[startInfo+2]

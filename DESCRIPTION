@@ -9,22 +9,76 @@ Description: More about what it does (maybe more than one line)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-Imports: raster, randomForest, MASS, methods, RColorBrewer, XML, digest, dplyr, exactextractr, imager, lwgeom, scales, sf, shiny, sp, keys, shinydashboard
+Imports:
+    raster,
+    randomForest,
+    MASS,
+    methods,
+    RColorBrewer,
+    XML,
+    digest,
+    dplyr,
+    exactextractr,
+    imager,
+    lwgeom,
+    scales,
+    sf,
+    shiny,
+    sp,
+    keys,
+    shinydashboard
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Collate: 
-    'IMCstackOpen.R'
-    'IMCstackSave.R'
-    'checkDir.R'
+    'AAA_imports.R'
+    'classDef_IMC_Analysis.R'
+    'classDef_IMC_AnalysisList.R'
     'classDef_IMC_ChannelTable.R'
+    'classDef_IMC_Classification.R'
+    'classDef_IMC_ClassificationDirectives.R'
+    'classDef_IMC_ClassificationDirectivesList.R'
+    'classDef_IMC_Classifier.R'
+    'classDef_IMC_ExtractionDirectives.R'
+    'classDef_IMC_FilterFrame.R'
+    'classDef_IMC_InterpretationMatrix.R'
     'classDef_IMC_RasterStack.R'
     'classDef_IMC_RsCollection.R'
+    'classDef_IMC_Segmentation.R'
+    'classDef_IMC_SegmentationDirectives.R'
+    'classDef_IMC_SegmentationList.R'
     'classDef_IMC_StudyTable.R'
     'classDef_IMC_Study.R'
-    'initObjectAttr.R'
-    'initStudy.R'
-    'loadTxtToStack.R'
-    'mdfObjectAttr.R'
+    'classDef_IMC_TrainingFeatures.R'
+    'engine_imageRFilter.R'
+    'engine_monkeyForest.R'
+    'fun_IMCstackOpen.R'
+    'fun_IMCstackSave.R'
+    'fun_extractFeatures.R'
+    'fun_initStudy.R'
+    'fun_loadTxtToStack.R'
+    'fun_quantNorm.R'
+    'fun_runIMC.R'
+    'mthd_IMC_Analysis.R'
+    'mthd_IMC_ChannelTable.R'
+    'mthd_IMC_Filter.R'
     'mthd_IMC_StudyTable.R'
+    'mthd_IMC_TrainingFeatures.R'
     'mthd_IMC_stack.R'
+    'mthd_addClassificationDirectives.R'
+    'mthd_addExtractionDirectives.R'
+    'mthd_addInterpretationMatrix.R'
+    'mthd_addSegmentationDirectives.R'
+    'mthd_classify.R'
+    'mthd_distilExpression.R'
+    'mthd_extractTrainingFeatures.R'
+    'mthd_localCorrection.R'
+    'mthd_makeClassificationModel.R'
+    'mthd_segment.R'
+    'mthd_testSegment.R'
+    'util_checkDir.R'
     'util_cryonMessages.R'
+    'util_initObjectAttr.R'
+    'util_mdfObjectAttr.R'
+    'util_plotsPoly.R'
+    'util_strgfObjectAttr.R'
+    'var_defaults.R'

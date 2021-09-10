@@ -43,9 +43,11 @@ setMethod('show','IMC_Study',
             nchl<-length(which(cht$channel!=''))
             nmrkr<-length(which(cht$marker!=''))
             nld<-length(which(cht$loaded))
+            att<-strgfObjectAttr(object)
             cat('IMC study \n')
             cat(paste0('with ',nroi,'\t\t ROI \n'))
             cat(paste0('     ',nchl,'\t\t channels, (',nld,' loaded)\n'))
             cat(paste0('     ',nmrkr,'\t\t markers \n'))
+            cat(att)
             }
           })
