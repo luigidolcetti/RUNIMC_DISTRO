@@ -85,8 +85,6 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                       nV<-as.numeric(names(tableX)[wM])
                                       return(nV)
                                     },
-                                    # filename = file.path(fileD,
-                                    #                      paste0(fileNN,suffix,'.',fileE)),
                                     pad=T,
                                     padValue=pdv,
                                     overwrite = T,
@@ -101,18 +99,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                           overwrite=T,
                                           format='raster')
               oldStk[[i]][[newName]]<-newRst
-
-              rstrStk<-IMC_stack(x = as.list(oldStk[[i]]),
-                                 uid = oldStk[[i]]@uid,
-                                 IMC_text_file = oldStk[[i]]@IMC_text_file,
-                                 study = oldStk[[i]]@study,
-                                 sample = oldStk[[i]]@sample,
-                                 replicate = oldStk[[i]]@replicate,
-                                 ROI = oldStk[[i]]@ROI,
-                                 bioGroup = oldStk[[i]]@bioGroup,
-                                 channels = oldStk[[i]]@channels)
-
-              rstrStk<-IMCstackSave(rstrStk,raster::filename(oldStk[[i]]))
+              rstrStk<-IMCstackSave(oldStk[[i]],raster::filename(oldStk[[i]]))
             })
 
 

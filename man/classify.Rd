@@ -4,7 +4,7 @@
 \alias{classify}
 \title{Classify}
 \usage{
-classify(x, method = NULL, ...)
+classify(x, method = NULL, update = T, ...)
 }
 \arguments{
 \item{x}{IMC_study, a study}

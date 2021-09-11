@@ -51,6 +51,7 @@ Collate:
     'classDef_IMC_TrainingFeatures.R'
     'engine_imageRFilter.R'
     'engine_monkeyForest.R'
+    'engine_randomOnions.R'
     'fun_IMCstackOpen.R'
     'fun_IMCstackSave.R'
     'fun_extractFeatures.R'
