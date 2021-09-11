@@ -4,7 +4,7 @@
 \alias{classify}
 \title{Classify}
 \usage{
-classify(x, method = NULL, saveToDisk = T, ...)
+classify(x, method = NULL, ...)
 }
 \arguments{
 \item{x}{IMC_study, a study}

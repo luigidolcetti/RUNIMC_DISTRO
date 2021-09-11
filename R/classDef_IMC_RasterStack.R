@@ -24,3 +24,19 @@ setMethod('initialize','IMC_RasterStack',
             Object@channels<-new('IMC_ChannelTable')
             Object<-initObjectAttr(Object)
             return(Object)})
+
+setMethod('show','IMC_RasterStack',
+          function(object){
+
+            att<-strgfObjectAttr(object)
+            cat(paste0('IMC RasterStack: \n'))
+            cat(paste0('uid:\t\t',object@uid,'\n'))
+            cat(paste0('raw:\t\t',object@IMC_text_file,'\n'))
+            cat(paste0('study:\t\t',object@study,'\n'))
+            cat(paste0('sample:\t\t',object@sample,'\n'))
+            cat(paste0('replicate:\t',object@replicate,'\n'))
+            cat(paste0('ROI:\t\t',object@ROI,'\n'))
+            cat(paste0('bio-group:\t',object@bioGroup,'\n'))
+            cat(paste0('layers:\t',paste(names(object),collapse=', '),'\n'))
+            cat(att)
+          })

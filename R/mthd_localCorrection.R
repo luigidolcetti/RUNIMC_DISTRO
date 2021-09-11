@@ -39,7 +39,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
 
             chkLayer<-sapply(chkLayer,function(x){any(labelLayer %in% x)},simplify = T,USE.NAMES = F)
 
-            if (!all(chkLayer)) stop(RUNIMC:::mError('cannot find specified labelLayer'),call. = F)
+            if (!all(chkLayer)) stop(mError('cannot find specified labelLayer'),call. = F)
 
             chkRAT<-lapply(x$currentAnalysis$classification,function(x){
               raster::levels(x[[labelLayer]])[1]
@@ -47,21 +47,21 @@ setMethod('localCorrection',signature = ('IMC_Study'),
 
             chkRATnull<-sapply(chkRAT,is.null,simplify = T,USE.NAMES = F)
 
-            if (any(chkRATnull)) stop(RUNIMC:::mError('not all classification have classes'),call. = F)
+            if (any(chkRATnull)) stop(mError('not all classification have classes'),call. = F)
 
             chkRATpadding<-sapply(chkRAT,function(x){
               paddingLabel %in% x[[1]][,2]
             },simplify = T,USE.NAMES = F)
 
-            if (!all(chkRATpadding)) stop(RUNIMC:::mError('some class table do not contain paddingLabel'),call.=F)
+            if (!all(chkRATpadding)) stop(mError('some class table do not contain paddingLabel'),call.=F)
 
             pdv<-unique(sapply(chkRAT,function(x){
               x[[1]][x[[1]][,2]==paddingLabel,1]
             },simplify = T,USE.NAMES = F))
 
-            if (length(pdv)>1) stop(RUNIMC:::mError('problems with padding value matching more than one ID'),call. = F)
+            if (length(pdv)>1) stop(mError('problems with padding value matching more than one ID'),call. = F)
 
-            if ((matrixExtent %% 2)==0) stop(RUNIMC:::mError('matrixExtent must be a odd number'))
+            if ((matrixExtent %% 2)==0) stop(mError('matrixExtent must be a odd number'))
 
 
             uids<-st_uids(x)

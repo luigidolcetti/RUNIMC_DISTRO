@@ -31,7 +31,7 @@ setMethod('tf_areaQuantile',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.areaQuantile(x$trainingFeatures$geometry,quantiles)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -71,7 +71,7 @@ setMethod('tf_areaStatistics',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.areaStatistics(x$trainingFeatures$geometry)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -112,7 +112,7 @@ setMethod('tf_roundnessQuantile',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.roundnessQuantile(x$trainingFeatures$geometry,quantiles)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -152,7 +152,7 @@ setMethod('tf_roundnessStatistics',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.roundnessStatistics(x$trainingFeatures$geometry)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -193,7 +193,7 @@ setMethod('tf_perimeterQuantile',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.perimeterQuantile(x$trainingFeatures$geometry,quantiles)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -233,7 +233,7 @@ setMethod('tf_perimeterStatistics',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.perimeterStatistics(x$trainingFeatures$geometry)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -276,7 +276,7 @@ setMethod('tf_labelList',signature(x='environment'),
               if (!is.null(x$trainingFeatures)){
                 out<-.labelList(x$trainingFeatures)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })
@@ -326,7 +326,7 @@ setMethod('tf_featureList',signature(x='environment'),
               if (!is.null(x$trainingFeatures$value)){
                 out<-.featuresList(x$trainingFeatures$value)
                 return(out)} else {
-                  stop(RUNIMC:::mError("couldn't find any training featurs"))
+                  stop(mError("couldn't find any training featurs"))
                 }
             }
           })

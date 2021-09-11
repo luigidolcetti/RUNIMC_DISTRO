@@ -8,15 +8,14 @@
 #'
 #' }
 #' @export
-setGeneric("classify", function(x,method=NULL,saveToDisk=T,...)
+setGeneric("classify", function(x,method=NULL,update=T,...)
   standardGeneric("classify"))
 
 
 setMethod('classify',signature = ('IMC_Study'),
-          function(x,method=NULL,saveToDisk=T,...){
+          function(x,method=NULL,update=T,...){
 
             if (is.null(x$currentAnalysis$classifier)) stop(mError('coud not find a classification model to apply'))
-            # clfrClass<-paste(class(x$currentAnalysis$classifier),collapse = '_')
             if (is.null(method)) stop(mError('specify what method to use'))
 
             switch(method,
@@ -27,8 +26,6 @@ setMethod('classify',signature = ('IMC_Study'),
                      uids<-x$studyTable$uid
 
                      TEST_monkey<-sapply(uids,function(uid){
-
-
                        rst<-list(x$raster[[uid]],x$currentAnalysis$derivedRasters[[uid]])
                        rstrStk<-IMC_stack(x = rst,
                                           uid = x$raster[[uid]]@uid,
@@ -40,14 +37,11 @@ setMethod('classify',signature = ('IMC_Study'),
                                           bioGroup = x$raster[[uid]]@bioGroup,
                                           channels = x$raster[[uid]]@channels)
 
-                       if (saveToDisk) {
+
                          fn_filePath<-file.path(x$currentAnalysis$folder,
                                                 'test/classification')
                          checkDir(fn_filePath,'rasters')
                          checkDir(fn_filePath,'rasterStacks')
-                       } else {
-                         fn_filePath<-NULL
-                       }
 
                        mf<-monkeyForest(fn_rst =rstrStk,
                                         fn_layers = pFtr,
@@ -58,11 +52,27 @@ setMethod('classify',signature = ('IMC_Study'),
                                         fn_filePath = fn_filePath)},USE.NAMES = T)
 
                      if (is.null(x$currentAnalysis$classification)){
-                       TEST_monkey<-new('IMC_Classification',TEST_monkey)
-                       x$currentAnalysis$classification<-TEST_monkey
+                       newClassification<-TEST_monkey
+
                      } else {
-                       x$currentAnalysis$classification<-append(x$currentAnalysis$classification,TEST_monkey)
+                       oldClassification<-x$currentAnalysis$classification
+                      newClassification<-lapply(setNames(uids,uids),function(uid){
+                        mergeIMC_stacks(oldClassification[[uid]],
+                                        TEST_monkey[[uid]],
+                                        update = update)})
                      }
+                      newClassification<-new('IMC_Classification',newClassification)
+
+                      newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+                      attr(newClassification,'crtnTimeStmp')<-attr(x$currentAnalysis$classification,'crtnTimeStmp')
+                      attr(newClassification,'mdtnTimeStmp')<-newTimeStmp
+
+                      if (!is.null(attr(x$currentAnalysis$classification,'fileArchive'))){
+                        attr(newClassification,'artnTimeStmp')<-newTimeStmp
+                        attr(newClassification,'fileArchive')<-attr(x$currentAnalysis$classification,'fileArchive')
+                      }
+                      x$currentAnalysis$classification<-newClassification
 
                    },
                    randomOnions={
@@ -77,8 +87,8 @@ setMethod('classify',signature = ('IMC_Study'),
                                                      fn_raster=x$raster,
                                                      fn_derivedRaster=x$currentAnalysis$derivedRasters,
                                                      fn_classifiers = x$currentAnalysis$classifier[[method]])
-                     newClassification<-new('IMC_Classification',newClassification)
 
+                     newClassification<-new('IMC_Classification',newClassification)
 
                      newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
 
@@ -100,8 +110,8 @@ setMethod('classify',signature = ('IMC_Study'),
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
             attr(x,'mdtnTimeStmp')<-newTimeStmp
             attr(x$currentAnalysis,'mdtnTimeStmp')<-newTimeStmp
-            if (saveToDisk) {
-              attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
-              attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
-            }
+
+            attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
+            attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
+
           })
