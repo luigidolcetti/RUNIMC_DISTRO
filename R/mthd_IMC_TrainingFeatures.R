@@ -16,20 +16,20 @@ setGeneric("tf_areaQuantile", function(x,quantiles,...)
 
 setMethod('tf_areaQuantile',signature(x='IMC_TrainingFeatures'),
           function(x,quantiles){
-            .areaQuantile(x$geometry,quantiles)
+            .areaQuantile(x@geometry,quantiles)
           })
 
 setMethod('tf_areaQuantile',signature(x='environment'),
           function(x,quantiles){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.areaQuantile(x$currentAnalysis$trainingFeatures$geometry,quantiles)
+              out<-.areaQuantile(x$currentAnalysis$trainingFeatures@geometry,quantiles)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.areaQuantile(x$trainingFeatures$geometry,quantiles)
+                out<-.areaQuantile(x$trainingFeatures@geometry,quantiles)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -56,20 +56,20 @@ setGeneric("tf_areaStatistics", function(x,...)
 
 setMethod('tf_areaStatistics',signature(x='IMC_TrainingFeatures'),
           function(x){
-            .areaStatistics(x$geometry)
+            .areaStatistics(x@geometry)
           })
 
 setMethod('tf_areaStatistics',signature(x='environment'),
           function(x){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.areaStatistics(x$currentAnalysis$trainingFeatures$geometry)
+              out<-.areaStatistics(x$currentAnalysis$trainingFeatures@geometry)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.areaStatistics(x$trainingFeatures$geometry)
+                out<-.areaStatistics(x$trainingFeatures@geometry)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -97,20 +97,20 @@ setGeneric("tf_roundnessQuantile", function(x,quantiles,...)
 
 setMethod('tf_roundnessQuantile',signature(x='IMC_TrainingFeatures'),
           function(x,quantiles){
-            .roundnessQuantile(x$geometry,quantiles)
+            .roundnessQuantile(x@geometry,quantiles)
           })
 
 setMethod('tf_roundnessQuantile',signature(x='environment'),
           function(x,quantiles){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.roundnessQuantile(x$currentAnalysis$trainingFeatures$geometry,quantiles)
+              out<-.roundnessQuantile(x$currentAnalysis$trainingFeatures@geometry,quantiles)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.roundnessQuantile(x$trainingFeatures$geometry,quantiles)
+                out<-.roundnessQuantile(x$trainingFeatures@geometry,quantiles)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -137,20 +137,20 @@ setGeneric("tf_roundnessStatistics", function(x,...)
 
 setMethod('tf_roundnessStatistics',signature(x='IMC_TrainingFeatures'),
           function(x){
-            .roundnessStatistics(x$geometry)
+            .roundnessStatistics(x@geometry)
           })
 
 setMethod('tf_roundnessStatistics',signature(x='environment'),
           function(x){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.roundnessStatistics(x$currentAnalysis$trainingFeatures$geometry)
+              out<-.roundnessStatistics(x$currentAnalysis$trainingFeatures@geometry)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.roundnessStatistics(x$trainingFeatures$geometry)
+                out<-.roundnessStatistics(x$trainingFeatures@geometry)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -178,20 +178,20 @@ setGeneric("tf_perimeterQuantile", function(x,quantiles,...)
 
 setMethod('tf_perimeterQuantile',signature(x='IMC_TrainingFeatures'),
           function(x,quantiles){
-            .perimeterQuantile(x$geometry,quantiles)
+            .perimeterQuantile(x@geometry,quantiles)
           })
 
 setMethod('tf_perimeterQuantile',signature(x='environment'),
           function(x,quantiles){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.perimeterQuantile(x$currentAnalysis$trainingFeatures$geometry,quantiles)
+              out<-.perimeterQuantile(x$currentAnalysis$trainingFeatures@geometry,quantiles)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.perimeterQuantile(x$trainingFeatures$geometry,quantiles)
+                out<-.perimeterQuantile(x$trainingFeatures@geometry,quantiles)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -218,20 +218,20 @@ setGeneric("tf_perimeterStatistics", function(x,...)
 
 setMethod('tf_perimeterStatistics',signature(x='IMC_TrainingFeatures'),
           function(x){
-            .perimeterStatistics(x$geometry)
+            .perimeterStatistics(x@geometry)
           })
 
 setMethod('tf_perimeterStatistics',signature(x='environment'),
           function(x){
 
             if (!is.null(x$currentAnalysis$trainingFeatures)){
-              out<-.perimeterStatistics(x$currentAnalysis$trainingFeatures$geometry)
+              out<-.perimeterStatistics(x$currentAnalysis$trainingFeatures@geometry)
               return(out)
 
             } else {
 
               if (!is.null(x$trainingFeatures)){
-                out<-.perimeterStatistics(x$trainingFeatures$geometry)
+                out<-.perimeterStatistics(x$trainingFeatures@geometry)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }
@@ -241,9 +241,9 @@ setMethod('tf_perimeterStatistics',signature(x='environment'),
 #####-------------------------------------------------------
 
 .labelList<-function(fn_trainingFeatures){
-  if (class(fn_trainingFeatures$geometry$label)=='factor'){
-    out<-levels(fn_trainingFeatures$geometry$label)} else {
-      out<-unique(fn_trainingFeatures$geometry$label)
+  if (class(fn_trainingFeatures@geometry$label)=='factor'){
+    out<-levels(fn_trainingFeatures@geometry$label)} else {
+      out<-unique(fn_trainingFeatures@geometry$label)
     }
   return(out)
 }
@@ -311,20 +311,20 @@ setGeneric("tf_featureList", function(x,...)
 
 setMethod('tf_featureList',signature(x='IMC_TrainingFeatures'),
           function(x){
-            .featuresList(x$value)
+            .featuresList(x@value)
           })
 
 setMethod('tf_featureList',signature(x='environment'),
           function(x){
 
-            if (!is.null(x$currentAnalysis$trainingFeatures$value)){
-              out<-.featuresList(x$currentAnalysis$trainingFeatures$value)
+            if (!is.null(x$currentAnalysis$trainingFeatures@value)){
+              out<-.featuresList(x$currentAnalysis$trainingFeatures@value)
               return(out)
 
             } else {
 
-              if (!is.null(x$trainingFeatures$value)){
-                out<-.featuresList(x$trainingFeatures$value)
+              if (!is.null(x$trainingFeatures@value)){
+                out<-.featuresList(x$trainingFeatures@value)
                 return(out)} else {
                   stop(mError("couldn't find any training featurs"))
                 }

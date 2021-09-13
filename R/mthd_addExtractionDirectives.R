@@ -57,6 +57,5 @@ setMethod('addExtractionDirectives',signature = ('IMC_Study'),
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
             attr(x,'mdtnTimeStmp')<-newTimeStmp
             attr(x$currentAnalysis,'mdtnTimeStmp')<-newTimeStmp
-            x$currentAnalysis$extractionDirectives<-newDirectives
 
           })

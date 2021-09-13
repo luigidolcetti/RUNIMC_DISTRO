@@ -80,6 +80,8 @@ Collate:
     'mthd_makeClassificationModel.R'
     'mthd_segment.R'
     'mthd_testSegment.R'
+    'util_XMLparseObject.R'
+    'util_archiveRDS.R'
     'util_checkDir.R'
     'util_cryonMessages.R'
     'util_initObjectAttr.R'

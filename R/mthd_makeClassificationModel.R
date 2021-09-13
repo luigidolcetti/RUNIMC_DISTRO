@@ -31,7 +31,7 @@ setMethod('makeClassificationModel',signature = ('IMC_Study'),
                      cPrm<-cPrm[unlist(lapply(cPrm,function(x) !is.null(x)))]
                      fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
                      rFcall<-c(list(formula = fFormula,
-                                    data = x$currentAnalysis$trainingFeatures$value),
+                                    data = x$currentAnalysis$trainingFeatures@value),
                                cPrm)
                      rf_classifier <- do.call(randomForest::randomForest,rFcall)
 
@@ -47,7 +47,7 @@ setMethod('makeClassificationModel',signature = ('IMC_Study'),
                      rf_classifier<-sapply(Lvar,function(lbl){
                        cat('Random Forest...:::',lbl,':::\n')
                        rFcall<-c(list(formula = fFormula,
-                                      data = x$currentAnalysis$trainingFeatures$value[x$currentAnalysis$trainingFeatures$value$parLabel==lbl,]),
+                                      data = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,]),
                                  cPrm)
                        rf<-do.call(randomForest::randomForest,rFcall)
                        return(rf)
