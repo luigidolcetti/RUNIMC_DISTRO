@@ -9,7 +9,17 @@ IMCstackSave<-function (x, filename)
     stop("Provide a non empty filename.")
   }
   info <- t(sapply(x@layers, function(i) c(i@file@name)))
-  info<-c(info,'****info section****',x@uid,x@IMC_text_file,x@study,x@sample,x@replicate,x@ROI,x@bioGroup)
+  info<-c(info,
+          '****info section****',
+          x@uid,
+          x@IMC_text_file,
+          x@study,
+          x@sample,
+          x@replicate,
+          x@ROI,
+          x@bioGroup,
+          x@type)
+
   utils::write.table(info, filename, row.names = FALSE,
                      col.names = FALSE)
   x@filename <- filename

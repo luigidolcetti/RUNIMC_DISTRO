@@ -56,6 +56,7 @@ initStudy<-function(fn_studyName='IMCstudy',
   rasterFolder<-checkDir(studyFolder,'rasters',verbose=fn_verbose)
   stackFolder<-checkDir(studyFolder,'rasterStacks',verbose=fn_verbose)
   analysisFolder<-checkDir(studyFolder,'analysis',verbose=fn_verbose)
+  archiveFolder<-checkDir(studyFolder,'archive',verbose=fn_verbose)
 
   rawDataFiles<-list.files(fn_rawDataFolder,full.names = T,pattern = '*.txt',recursive = F)
   if (length(rawDataFiles)==0) stop(mError("Could not find any raw data"),call. = F)
@@ -146,21 +147,7 @@ initStudy<-function(fn_studyName='IMCstudy',
   studyTable<-do.call(rbind.data.frame,studyTable)
   studyTable<-new('IMC_StudyTable',studyTable)
 
-  # newStudy<-new('IMC_Study')
-  # newStudy<-new.env()
-  # newStudy<-initObjectAttr(newStudy)
-  #
-  # newStudy$name<-fn_studyName
-  # newStudy$rootFolder<-fn_rootFolder
-  # newStudy$rawDataFolder=fn_rawDataFolder
-  # newStudy$studyTable = studyTable
-  # newStudy$raster=rst
-  # newStudy$whichColumns=fn_whichColumns
-  # newStudy$channels=Channels
-  # newStudy$analysis=NULL
-  # newStudy$currentAnalysis=NULL
-
-  newStudy<-new('IMC_Study',
+   newStudy<-new('IMC_Study',
                 name=fn_studyName,
                 rootFolder=fn_rootFolder,
                 rawDataFolder=fn_rawDataFolder,

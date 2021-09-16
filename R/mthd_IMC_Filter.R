@@ -149,7 +149,7 @@ setMethod('deployFilters',signature = ('IMC_Study'),
               ROI<-Reduce('=',lapply(rasterStackList,slot,'ROI'))
               bioGroup<-Reduce('=',lapply(rasterStackList,slot,'bioGroup'))
               channels<-Reduce('=',lapply(rasterStackList,slot,'channels'))
-              IMC_stack(rasterStackList,
+              out<-IMC_stack(rasterStackList,
                         uid,
                         IMC_text_file,
                         study,
@@ -157,14 +157,28 @@ setMethod('deployFilters',signature = ('IMC_Study'),
                         replicate,
                         ROI,
                         bioGroup,
-                        channels)},USE.NAMES = T)
+                        channels,
+                        type = 'calc')
+
+              },USE.NAMES = T)
 
 
             derivedRasters<-sapply(names(derivedRasters),function(nms){
-              IMCstackSave(derivedRasters[[nms]],
-                           file.path(x$currentAnalysis$folder,
-                                     'rasterStacks',
-                                     paste0(derivedRasters[[nms]]@IMC_text_file,'.stk')))
+
+              fpt<-file.path(x$currentAnalysis$folder,
+                             'rasterStacks',
+                             paste0(derivedRasters[[nms]]@IMC_text_file,'.stk'))
+
+              out<-IMCstackSave(derivedRasters[[nms]],fpt)
+
+              newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+              attr(out,'mdtnTimeStmp')<-newTimeStmp
+              attr(out,'artnTimeStmp')<-newTimeStmp
+              attr(out,'fileArchive')<-fpt
+
+              return(out)
+
             },USE.NAMES = T,simplify = F)
 
 

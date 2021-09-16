@@ -32,7 +32,9 @@ setMethod('newAnalysis',signature = ('IMC_Study'),
             if (any(analysisName %in% x$analysis)) {stop(mError(paste0('\n"',analysisName,'" already exist')))}
 
             # x$currentAnalysis<-new('IMC_Analysis',parent=x)
-            x$currentAnalysis<-new('IMC_Analysis',name=analysisNameRevised)
+            x$currentAnalysis<-new('IMC_Analysis',
+                                   name=analysisNameRevised,
+                                   exprs=new('IMC_ExpressionTable'))
 
             x$currentAnalysis$folder<-checkDir(paste(x$rootFolder,x$name,'analysis',sep='/'),x$currentAnalysis$name)
 
@@ -43,6 +45,7 @@ setMethod('newAnalysis',signature = ('IMC_Study'),
             checkDir(x$currentAnalysis$folder,'test')
             checkDir(x$currentAnalysis$folder,'test/polygons')
             checkDir(x$currentAnalysis$folder,'test/classification')
+            checkDir(x$currentAnalysis$folder,'archive')
 
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
             attr(x,'mdtnTimeStmp')<-newTimeStmp

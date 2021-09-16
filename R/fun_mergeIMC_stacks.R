@@ -32,7 +32,8 @@ mergeIMC_stacks<-function(x,y,update=T){
   out@sample<-x@sample
   out@replicate<-x@replicate
   out@ROI<-x@ROI
-  out@bioGroup<-out@bioGroup
+  out@bioGroup<-x@bioGroup
+  out@type<-x@type
   attr(out,'artnTimeStmp')<-attr(y,'artnTimeStmp')
   attr(out,'fileArchive')<-attr(y,'fileArchive')
   return(out)

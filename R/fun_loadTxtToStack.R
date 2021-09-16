@@ -71,11 +71,20 @@ loadTxtToStack<-function(fn_path=NULL,
                      replicate = fn_details$replicate,
                      ROI = fn_details$ROI,
                      bioGroup = fn_details$bioGroup,
-                     channels = fn_channel)
+                     channels = fn_channel,
+                     type = 'raw')
 
 
   if (!is.null(fn_rasterStackPath)) {
-    rstrStk<-IMCstackSave(rstrStk,paste0(fn_rasterStackPath,'/',fn_file,'.stk'))
+
+    rstrStk<-IMCstackSave(rstrStk,file.path(fn_rasterStackPath,paste0(fn_file,'.stk')))
+
+    newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+    attr(rstrStk,'mdtnTimeStmp')<-newTimeStmp
+    attr(rstrStk,'artnTimeStmp')<-newTimeStmp
+    attr(rstrStk,'fileArchive')<-file.path(fn_rasterStackPath,paste0(fn_file,'.stk'))
+
     if (fn_verbose) message(mMessage(paste0(fn_file,'.stk',' saved in ',fn_rasterStackPath)))
   }
 

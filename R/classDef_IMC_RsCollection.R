@@ -6,7 +6,6 @@ IMC_RsCollection<-setClass('IMC_RsCollection',
 setMethod('initialize','IMC_RsCollection',
           function(.Object,val, ...) {
             Object <- callNextMethod(.Object, ...)
-
             Object@.Data <- val
             Object<-initObjectAttr(Object)
             return(Object)})

@@ -53,9 +53,17 @@ monkeyForest<-function(fn_rst = NULL,
                      replicate = fn_rst@replicate,
                      ROI = fn_rst@ROI,
                      bioGroup = fn_rst@bioGroup,
-                     channels = fn_rst@channels)
+                     channels = fn_rst@channels,
+                     type = 'class')
 
-  rstrStk<-IMCstackSave(rstrStk,file.path(fn_filePath,'rasterStacks',paste0(fn_rst@IMC_text_file,'.stk')))
+  fpt <- file.path(fn_filePath,'rasterStacks',paste0(fn_rst@IMC_text_file,'.stk'))
+  rstrStk<-IMCstackSave(rstrStk,fpt)
+
+  newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+  attr(rstrStk,'mdtnTimeStmp')<-newTimeStmp
+  attr(rstrStk,'artnTimeStmp')<-newTimeStmp
+  attr(rstrStk,'fileArchive')<-fpt
 
   return(rstrStk)
 }

@@ -14,6 +14,7 @@ setMethod('IMC_stack',signature(x='list'),
                    ROI,
                    bioGroup,
                    channels,
+                   type,
                    ...){
 
             rstrStk<-raster::stack(x)
@@ -31,6 +32,7 @@ setMethod('IMC_stack',signature(x='list'),
             if (!missing(bioGroup)) {
               if (!is.null(bioGroup)) {rstrStk@bioGroup<-bioGroup} else {rstrStk@bioGroup='NO_bioGroup'}}
             if (!missing(channels)) {rstrStk@channels<-channels}
+            if (!missing(type)) {rstrStk@type<-type} else {rstrStk@type<-'ANY'}
             return(rstrStk)
           })
 
@@ -45,6 +47,7 @@ setMethod('IMC_stack',signature(x='IMC_RasterStack'),
             ROI<-Reduce('=',lapply(rasterStackList,slot,'ROI'))
             bioGroup<-Reduce('=',lapply(rasterStackList,slot,'bioGroup'))
             channels<-Reduce('=',lapply(rasterStackList,slot,'channels'))
+            type<-Reduce('=',lapply(rasterStackList,slot,'type'))
             newStack<-raster::stack(rasterStackList)
             newStack<-as(newStack,'IMC_RasterStack')
             newStack@uid<-uid
@@ -55,6 +58,7 @@ setMethod('IMC_stack',signature(x='IMC_RasterStack'),
             newStack@ROI<-ROI
             newStack@bioGroup<-bioGroup
             newStack@channels<-channels
+            newStack@type<-type
             return(newStack)
           })
 

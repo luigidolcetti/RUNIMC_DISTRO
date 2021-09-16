@@ -60,7 +60,8 @@ imageRFilter<-function(fn_rasterStack,
                                        sample=fn_rasterStack[[st]]@sample,
                                        replicate=fn_rasterStack[[st]]@replicate,
                                        ROI=fn_rasterStack[[st]]@ROI,
-                                       bioGroup=fn_rasterStack[[st]]@bioGroup)
+                                       bioGroup=fn_rasterStack[[st]]@bioGroup,
+                                       type='calc')
     }
   }
   return(new_rasterStack)

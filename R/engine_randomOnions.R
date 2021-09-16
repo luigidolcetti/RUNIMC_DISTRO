@@ -89,8 +89,16 @@ randomOnions<-function(fn_rstStack=NULL,
 
       }
 
-      filePath<-raster::filename(fn_rstStack[[smp]])
-      outStk<-IMCstackSave(fn_rstStack[[smp]],filePath)
+      fpt<-raster::filename(fn_rstStack[[smp]])
+
+      outStk<-IMCstackSave(fn_rstStack[[smp]],fpt)
+
+      newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+      attr(outStk,'mdtnTimeStmp')<-newTimeStmp
+      attr(outStk,'artnTimeStmp')<-newTimeStmp
+      attr(outStk,'fileArchive')<-fpt
+
       return(outStk)
     },USE.NAMES = T,simplify = F)
     return(classOut)

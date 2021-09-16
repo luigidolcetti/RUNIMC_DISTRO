@@ -35,13 +35,14 @@ setMethod('classify',signature = ('IMC_Study'),
                                           replicate = x$raster[[uid]]@replicate,
                                           ROI = x$raster[[uid]]@ROI,
                                           bioGroup = x$raster[[uid]]@bioGroup,
-                                          channels = x$raster[[uid]]@channels)
+                                          channels = x$raster[[uid]]@channels,
+                                          type = 'ANY')
 
 
-                         fn_filePath<-file.path(x$currentAnalysis$folder,
-                                                'test/classification')
-                         checkDir(fn_filePath,'rasters')
-                         checkDir(fn_filePath,'rasterStacks')
+                       fn_filePath<-file.path(x$currentAnalysis$folder,
+                                              'test/classification')
+                       checkDir(fn_filePath,'rasters')
+                       checkDir(fn_filePath,'rasterStacks')
 
                        mf<-monkeyForest(fn_rst =rstrStk,
                                         fn_layers = pFtr,
@@ -56,23 +57,21 @@ setMethod('classify',signature = ('IMC_Study'),
 
                      } else {
                        oldClassification<-x$currentAnalysis$classification
-                      newClassification<-lapply(setNames(uids,uids),function(uid){
-                        mergeIMC_stacks(oldClassification[[uid]],
-                                        TEST_monkey[[uid]],
-                                        update = update)})
+                       newClassification<-lapply(setNames(uids,uids),function(uid){
+                         mergeIMC_stacks(oldClassification[[uid]],
+                                         TEST_monkey[[uid]],
+                                         update = update)})
                      }
-                      newClassification<-new('IMC_Classification',newClassification)
+                     newClassification<-new('IMC_Classification',newClassification)
 
-                      newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+                     newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
 
-                      attr(newClassification,'crtnTimeStmp')<-attr(x$currentAnalysis$classification,'crtnTimeStmp')
-                      attr(newClassification,'mdtnTimeStmp')<-newTimeStmp
+                     attr(newClassification,'crtnTimeStmp')<-attr(x$currentAnalysis$classification,'crtnTimeStmp')
+                     attr(newClassification,'mdtnTimeStmp')<-newTimeStmp
+                     attr(newClassification,'artnTimeStmp')<-newTimeStmp
+                     attr(newClassification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test','classification','rasterStacks')
 
-                      if (!is.null(attr(x$currentAnalysis$classification,'fileArchive'))){
-                        attr(newClassification,'artnTimeStmp')<-newTimeStmp
-                        attr(newClassification,'fileArchive')<-attr(x$currentAnalysis$classification,'fileArchive')
-                      }
-                      x$currentAnalysis$classification<-newClassification
+                     x$currentAnalysis$classification<-newClassification
 
                    },
                    randomOnions={
@@ -94,11 +93,9 @@ setMethod('classify',signature = ('IMC_Study'),
 
                      attr(newClassification,'crtnTimeStmp')<-attr(x$currentAnalysis$classification,'crtnTimeStmp')
                      attr(newClassification,'mdtnTimeStmp')<-newTimeStmp
+                     attr(newClassification,'artnTimeStmp')<-newTimeStmp
+                     attr(newClassification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test','classification','rasterStacks')
 
-                     if (!is.null(attr(x$currentAnalysis$classification,'fileArchive'))){
-                       attr(newClassification,'artnTimeStmp')<-newTimeStmp
-                       attr(newClassification,'fileArchive')<-attr(x$currentAnalysis$classification,'fileArchive')
-                     }
 
                      x$currentAnalysis$classification<-newClassification
 
@@ -111,7 +108,7 @@ setMethod('classify',signature = ('IMC_Study'),
             attr(x,'mdtnTimeStmp')<-newTimeStmp
             attr(x$currentAnalysis,'mdtnTimeStmp')<-newTimeStmp
 
-            attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
-            attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
+            # attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
+            # attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
 
           })

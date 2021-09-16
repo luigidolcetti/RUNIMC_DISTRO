@@ -3,13 +3,14 @@
 IMC_RasterStack<-setClass('IMC_RasterStack',
                           contains = 'RasterStack',
                           slots = c(uid='character',
-                                         IMC_text_file='character',
-                                         study='character',
-                                         sample='character',
-                                         replicate='character',
-                                         ROI='character',
-                                         bioGroup='character',
-                                         channels = 'IMC_ChannelTable'))
+                                    IMC_text_file='character',
+                                    study='character',
+                                    sample='character',
+                                    replicate='character',
+                                    ROI='character',
+                                    bioGroup='character',
+                                    channels = 'IMC_ChannelTable',
+                                    type = 'character'))
 
 setMethod('initialize','IMC_RasterStack',
           function(.Object, ...) {
@@ -22,6 +23,7 @@ setMethod('initialize','IMC_RasterStack',
             Object@ROI<-''
             Object@bioGroup<-''
             Object@channels<-new('IMC_ChannelTable')
+            Object@type<-''
             Object<-initObjectAttr(Object)
             return(Object)})
 
@@ -38,5 +40,6 @@ setMethod('show','IMC_RasterStack',
             cat(paste0('ROI:\t\t',object@ROI,'\n'))
             cat(paste0('bio-group:\t',object@bioGroup,'\n'))
             cat(paste0('layers:\t',paste(names(object),collapse=', '),'\n'))
+            cat(paste0('type:\t\t',object@type,'\n'))
             cat(att)
           })

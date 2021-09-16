@@ -16,6 +16,13 @@ IMCstackOpen<-function (fn_stackFile)
   rstStk@replicate<-tblStk[startInfo+5]
   rstStk@ROI<-tblStk[startInfo+6]
   rstStk@bioGroup<-tblStk[startInfo+7]
+  rstStk@type<-tblStk[startInfo+8]
   rstStk@filename <- fn_stackFile
+
+  newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+  attr(rstStk,'mdtnTimeStmp')<-file.info(fn_stackFile)$mtime
+  attr(rstStk,'artnTimeStmp')<-file.info(fn_stackFile)$mtime
+  attr(rstStk,'fileArchive')<-fn_stackFile
+
   return(rstStk)
 }

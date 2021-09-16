@@ -99,7 +99,17 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                           overwrite=T,
                                           format='raster')
               oldStk[[i]][[newName]]<-newRst
-              rstrStk<-IMCstackSave(oldStk[[i]],raster::filename(oldStk[[i]]))
+
+              fpt<-raster::filename(oldStk[[i]])
+              rstrStk<-IMCstackSave(oldStk[[i]],fpt)
+
+              newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+              attr(rstrStk,'mdtnTimeStmp')<-newTimeStmp
+              attr(rstrStk,'artnTimeStmp')<-newTimeStmp
+              attr(rstrStk,'fileArchive')<-fpt
+
+              return(rstrStk)
             })
 
 
@@ -110,11 +120,9 @@ setMethod('localCorrection',signature = ('IMC_Study'),
 
             attr(newClassification,'crtnTimeStmp')<-attr(x$currentAnalysis$classification,'crtnTimeStmp')
             attr(newClassification,'mdtnTimeStmp')<-newTimeStmp
+            attr(newClassification,'artnTimeStmp')<-newTimeStmp
+            attr(newClassification,'fileArchive')<-attr(x$currentAnalysis$classification,'fileArchive')
 
-            if (!is.null(attr(x$currentAnalysis$classification,'fileArchive'))){
-              attr(newClassification,'artnTimeStmp')<-newTimeStmp
-              attr(newClassification,'fileArchive')<-attr(x$currentAnalysis$classification,'fileArchive')
-            }
 
             x$currentAnalysis$classification<-newClassification
 
