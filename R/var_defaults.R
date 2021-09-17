@@ -117,7 +117,7 @@ methodParametersSegmentation<-list(
                       adaptative=T,
                       areaAdaptRate=0.1,
                       roundnessAdaptRate=0.1,
-                      segmentAlg = 'sign',
+                      segmentAlg = 'sign_simple',
                       fusion=T,
                       targetArea='training_mean',
                       maxNetworkSize=8,
