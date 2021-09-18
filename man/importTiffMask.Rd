@@ -11,7 +11,6 @@ importTiffMask(
   transposeImage = F,
   flipImage = NULL,
   layerName = "Tiff_imported",
-  saveToDisk = T,
   ...
 )
 }
@@ -26,9 +25,9 @@ importTiffMask(
 
 \item{layerName}{character, parameter passed to fn_layerName}
 
-\item{saveToDisk}{logical, save rater to disk? absolutely for large data sets}
-
 \item{...}{not implemented}
+
+\item{saveToDisk}{logical, save rater to disk? absolutely for large data sets}
 }
 \value{
 an object of class IMC_classification

@@ -10,23 +10,40 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
-    raster,
-    randomForest,
-    MASS,
-    methods,
-    RColorBrewer,
-    XML,
+    crayon,
+    data.table,
+    DescTools,
     digest,
     dplyr,
+    DT,
     exactextractr,
+    fs,
+    ggplot2,
+    igraph,
     imager,
+    keys,
     lwgeom,
+    MASS,
+    methods,
+    nngeo,
+    parallel,
+    pbapply,
+    plyr,
+    randomForest,
+    raster,
+    RColorBrewer,
     scales,
     sf,
     shiny,
+    shinyBS,
+    shinydashboard,
+    shinyjs,
     sp,
-    keys,
-    shinydashboard
+    stars,
+    stats,
+    tidyr,
+    utils,
+    XML
 RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Collate: 
@@ -103,7 +120,9 @@ Collate:
     'util_initObjectAttr.R'
     'util_mdfObjectAttr.R'
     'util_plotsPoly.R'
+    'util_prettyPrintList.R'
     'util_retrieveXML.R'
+    'util_show_default.R'
     'util_strgfObjectAttr.R'
     'util_wiseUnlist.R'
     'var_defaults.R'

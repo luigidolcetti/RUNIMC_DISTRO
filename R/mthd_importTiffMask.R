@@ -25,11 +25,11 @@
 #' }
 #'
 #' @export
-setGeneric("importTiffMask", function(x,fileFolder=NULL,orderAgain=NULL,transposeImage=F,flipImage=NULL,layerName='Tiff_imported',saveToDisk=T, ...)
-    standardGeneric("importTiffMask"))
+setGeneric("importTiffMask", function(x,fileFolder=NULL,orderAgain=NULL,transposeImage=F,flipImage=NULL,layerName='Tiff_imported', ...)
+  standardGeneric("importTiffMask"))
 
 setMethod('importTiffMask',signature = ('IMC_Study'),
-          function(x,fileFolder=NULL,orderAgain=NULL,transposeImage=F,flipImage=NULL,layerName='Tiff_imported',saveToDisk=T, ...){
+          function(x,fileFolder=NULL,orderAgain=NULL,transposeImage=F,flipImage=NULL,layerName='Tiff_imported', ...){
 
 
             if (is.null(fileFolder)) {stop(mError('specify a folder where to look for .tiff'))}
@@ -76,53 +76,44 @@ setMethod('importTiffMask',signature = ('IMC_Study'),
 
 
 
-            if (saveToDisk) {
-              filePath<-file.path(x$currentAnalysis$folder,
-                                  'test/classification')
-              rasterFilePath<-checkDir(filePath,'rasters')
-              stackFilePath<-checkDir(filePath,'rasterStacks')
-            }
+
+            filePath<-file.path(x$currentAnalysis$folder,
+                                'test/classification')
+            rasterFilePath<-checkDir(filePath,'rasters')
+            stackFilePath<-checkDir(filePath,'rasterStacks')
+
 
             newClassification<-sapply(uids,function(uid){
-              if (saveToDisk) {
-
-                TXT_file<-x$studyTable$IMC_text_file[x$studyTable$uid==uid]
-                dirPath<-checkDir(rasterFilePath,TXT_file)
-                rst<-list()
-                for (lbl in names(newClassificationList[[uid]])){
-                  filePath<-file.path(dirPath,paste0(lbl,'.grd'))
-                  rst[[lbl]]<-raster::writeRaster(x=newClassificationList[[uid]][[lbl]],
-                                                  filename = filePath,
-                                                  overwrite=T,
-                                                  format='raster')
-                }
 
 
-                rstrStk<-IMC_stack(x = rst,
-                                   uid = uid,
-                                   IMC_text_file = TXT_file,
-                                   study = x$studyTable$study[x$studyTable$uid==uid],
-                                   sample = x$studyTable$sample[x$studyTable$uid==uid],
-                                   replicate = x$studyTable$replicate[x$studyTable$uid==uid],
-                                   ROI = x$studyTable$ROI[x$studyTable$uid==uid],
-                                   bioGroup = x$studyTable$bioGroup[x$studyTable$uid==uid],
-                                   channels = data.frame())
-
-                names(rstrStk)<-names(newClassificationList[[uid]])
-
-                rstrStk<-IMCstackSave(rstrStk,file.path(stackFilePath,paste0(TXT_file,'.stk')))
-
-              } else {
-                rstrStk<-IMC_stack(x = newClassificationList[[uid]],
-                                   uid = uid,
-                                   IMC_text_file = TXT_file,
-                                   study = x$studyTable$study[x$studyTable$uid==uid],
-                                   sample = x$studyTable$sample[x$studyTable$uid==uid],
-                                   replicate = x$studyTable$replicate[x$studyTable$uid==uid],
-                                   ROI = x$studyTable$ROI[x$studyTable$uid==uid],
-                                   bioGroup = x$studyTable$bioGroup[x$studyTable$uid==uid],
-                                   channels = data.frame())
+              TXT_file<-x$studyTable$IMC_text_file[x$studyTable$uid==uid]
+              dirPath<-checkDir(rasterFilePath,TXT_file)
+              rst<-list()
+              for (lbl in names(newClassificationList[[uid]])){
+                filePath<-file.path(dirPath,paste0(lbl,'.grd'))
+                rst[[lbl]]<-raster::writeRaster(x=newClassificationList[[uid]][[lbl]],
+                                                filename = filePath,
+                                                overwrite=T,
+                                                format='raster')
               }
+
+
+              rstrStk<-IMC_stack(x = rst,
+                                 uid = uid,
+                                 IMC_text_file = TXT_file,
+                                 study = x$studyTable$study[x$studyTable$uid==uid],
+                                 sample = x$studyTable$sample[x$studyTable$uid==uid],
+                                 replicate = x$studyTable$replicate[x$studyTable$uid==uid],
+                                 ROI = x$studyTable$ROI[x$studyTable$uid==uid],
+                                 bioGroup = x$studyTable$bioGroup[x$studyTable$uid==uid],
+                                 channels = x$channels,
+                                 type = 'class')
+
+              names(rstrStk)<-names(newClassificationList[[uid]])
+
+              rstrStk<-IMCstackSave(rstrStk,file.path(stackFilePath,paste0(TXT_file,'.stk')))
+
+
               return(rstrStk)
             },USE.NAMES = T,simplify = F)
 
@@ -134,10 +125,10 @@ setMethod('importTiffMask',signature = ('IMC_Study'),
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
             attr(x,'mdtnTimeStmp')<-newTimeStmp
             attr(x$currentAnalysis,'mdtnTimeStmp')<-newTimeStmp
-            if (saveToDisk) {
-              attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
-              attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
-            }
+
+            attr(x$currentAnalysis$classification,'artnTimeStmp')<-newTimeStmp
+            attr(x$currentAnalysis$classification,'fileArchive')<-file.path(x$currentAnalysis$folder,'test/classification/rasterStacks')
+
           })
 
 #' Import tiff Mask
