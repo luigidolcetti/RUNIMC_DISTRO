@@ -82,6 +82,7 @@ Collate:
     'fun_extractPolygons.R'
     'fun_geometrical_measure.R'
     'fun_initStudy.R'
+    'fun_inspectFile.R'
     'fun_loadTxtToStack.R'
     'fun_mergeIMC_stacks.R'
     'fun_quantNorm.R'

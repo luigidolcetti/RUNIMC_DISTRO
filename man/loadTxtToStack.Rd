@@ -13,6 +13,8 @@ loadTxtToStack(
   fn_newNames = NULL,
   fn_transpose = F,
   fn_norm = F,
+  fn_x_column = "X",
+  fn_y_column = "Y",
   fn_details = list(study = "NO_study", sample = "NO_sample", ROI = "NO_ROI", replicate
     = "NO_replicate", bioGroup = "No_bioGroup"),
   fn_channel = NULL,

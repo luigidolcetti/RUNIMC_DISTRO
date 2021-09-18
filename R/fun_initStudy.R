@@ -32,6 +32,13 @@ initStudy<-function(fn_studyName='IMCstudy',
                     fn_rawDataFolder=NULL,
                     fn_whichFiles=NULL,
                     fn_whichColumns='named',
+                    fn_x_column = 'X',
+                    fn_y_column = 'Y',
+                    fn_nonChannelColumns = c('X','Y','Z','Start_push','End_push','Pushes_duration'),
+                    fn_emptyChannelPattern = '[0-9]+[A-z]+\\([A-z]+[0-9]+[A-z]+\\)',
+                    fn_usedChannelPattern = '[0-9]+[A-z]+-.+\\([A-z]+[0-9]+[A-z]+\\)',
+                    fn_channelPattern = '[0-9]+[A-z]+.*\\(([A-z]+[0-9]+[A-z]+)\\)',
+                    fn_markerPattern = '[0-9]+[A-z]+-(.+)\\([A-z]+[0-9]+[A-z]+\\)',
                     fn_transpose=F,
                     fn_overWrite=F,
                     fn_verbose=T,
@@ -78,19 +85,45 @@ initStudy<-function(fn_studyName='IMCstudy',
 
   Channels<-lapply(masterHeader,function(mstrhdr){
 
-    if (!any(mstrhdr %in% c('X','x','Y','y','Z','z','Start_push','End_push','Pushes_duration'))){
+    if (length(grep(mstrhdr,fn_nonChannelColumns,ignore.case = T,value = F))==0){
 
-      mstrhdrSplit<-strsplit(mstrhdr,'-')[[1]]
-      if (length(mstrhdrSplit)==1){
-        chnl<-gsub("\\(.+?\\)", "", mstrhdrSplit[1])
-        mrkr<-''
+      ECC<-grepl(fn_emptyChannelPattern,mstrhdr)
+      UCC<-grepl(fn_usedChannelPattern,mstrhdr)
+      OCC<-!ECC & !UCC
+
+      if (ECC){
+        chnl<-regexpr(fn_channelPattern,mstrhdr,perl = T)
+        chnl<-substr(mstrhdr,attr(chnl,'capture.start'),attr(chnl,'capture.start')+attr(chnl,'capture.length')-1)
+        mrkr<-'(empty)'
         if (fn_whichColumns=='named') ldld<-F
-      } else
-        if (length(mstrhdrSplit)>=2){
-          chnl<-mstrhdrSplit[1]
-          mrkr<-gsub("\\(.+?\\)", "", paste0(mstrhdrSplit[-1], collapse = "-"))
-          if (fn_whichColumns=='named') ldld<-T
-        } else {stop('Something weird whith the raw files...')}
+      }
+
+      if (UCC){
+        chnl<-regexpr(fn_channelPattern,mstrhdr,perl = T)
+        chnl<-substr(mstrhdr,attr(chnl,'capture.start'),attr(chnl,'capture.start')+attr(chnl,'capture.length')-1)
+        mrkr<-regexpr(fn_markerPattern,mstrhdr,perl = T)
+        mrkr<-substr(mstrhdr,attr(mrkr,'capture.start'),attr(mrkr,'capture.start')+attr(mrkr,'capture.length')-1)
+        if (fn_whichColumns=='named') ldld<-T
+      }
+
+      if (OCC){
+        chnl<-'(..??..)'
+        mrkr<-'(..??..)'
+        if (fn_whichColumns=='named') ldld<-NA
+      }
+
+      # mstrhdrSplit<-strsplit(mstrhdr,'-')[[1]]
+      # if (length(mstrhdrSplit)==1){
+      #   chnl<-gsub("\\(.+?\\)", "", mstrhdrSplit[1])
+      #   mrkr<-''
+      #   if (fn_whichColumns=='named') ldld<-F
+      # } else
+      #   if (length(mstrhdrSplit)>=2){
+      #     chnl<-mstrhdrSplit[1]
+      #     mrkr<-gsub("\\(.+?\\)", "", paste0(mstrhdrSplit[-1], collapse = "-"))
+      #     if (fn_whichColumns=='named') ldld<-T
+      #   } else {stop('Something weird whith the raw files...')}
+
       chnls<-data.frame(columnNames=mstrhdr,
                         RcolumnNames=tolower(make.names(mstrhdr,unique = F,allow_ = F)),
                         channel=chnl,
@@ -121,6 +154,8 @@ initStudy<-function(fn_studyName='IMCstudy',
                                     fn_channel = Channels,
                                     fn_transpose = fn_transpose,
                                     fn_norm = F,
+                                    fn_x_column = fn_x_column,
+                                    fn_y_column = fn_y_column,
                                     fn_trsh = NULL,
                                     fn_zeroOff = NULL,
                                     ...)

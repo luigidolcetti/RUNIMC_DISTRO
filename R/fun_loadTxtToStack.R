@@ -26,6 +26,8 @@ loadTxtToStack<-function(fn_path=NULL,
                          fn_newNames=NULL,
                          fn_transpose=F,
                          fn_norm=F,
+                         fn_x_column = 'X',
+                         fn_y_column = 'Y',
                          fn_details=list(study='NO_study',sample='NO_sample',ROI='NO_ROI', replicate='NO_replicate', bioGroup='No_bioGroup'),
                          fn_channel=NULL,
                          fn_trsh=0.965,
@@ -43,7 +45,7 @@ loadTxtToStack<-function(fn_path=NULL,
   rasterMatrix<-lapply(fn_cols,
                        function(cls){
 
-                         singleMatrix<-array(rawMatrix[,c('X','Y',cls)])
+                         singleMatrix<-array(rawMatrix[,c(fn_x_column,fn_y_column,cls)])
 
                          if (fn_norm){
                            singleMatrix[,cls]<-quantNorm(singleMatrix[,cls],fn_trsh,fn_zeroOff)
