@@ -16,7 +16,7 @@ initStudy(
   fn_emptyChannelPattern = "[0-9]+[A-z]+\\\\([A-z]+[0-9]+[A-z]+\\\\)",
   fn_usedChannelPattern = "[0-9]+[A-z]+-.+\\\\([A-z]+[0-9]+[A-z]+\\\\)",
   fn_channelPattern = "[0-9]+[A-z]+.*\\\\(([A-z]+[0-9]+[A-z]+)\\\\)",
-  fn_markerPattern = "[0-9]+[A-z]+-(.)+\\\\([A-z]+[0-9]+[A-z]+\\\\)",
+  fn_markerPattern = "[0-9]+[A-z]+-(.+)\\\\([A-z]+[0-9]+[A-z]+\\\\)",
   fn_transpose = F,
   fn_overWrite = F,
   fn_verbose = T,
