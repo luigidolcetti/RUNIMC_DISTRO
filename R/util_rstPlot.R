@@ -8,7 +8,11 @@ rstPlot<-function(x,
                   cex.mjt = 20,
                   minorT = 1,
                   cex.mnt = 40,
-                  asp=1){
+                  asp=1,
+                  uid = NULL,
+                  overlay = NULL,
+                  col = NA,
+                  border = 'cyan'){
 
   if (length(dim(x))==2) xTrans<-quantNorm(x,quantCap)
   if (length(dim(x))==3) {
@@ -53,6 +57,17 @@ rstPlot<-function(x,
 
 
   rasterImage(xTrans,x0,y0,xm,ym,interpolate = F)
+
+  if (is.null(uid)) warning(mWarning('uid missing, overlay polygons will not be dispayed'))
+  if (!is.null(overlay) & !is.null(uid)) {
+    cropOverlay<-overlay[overlay$uid==uid,]
+    cropOverlay<-sf::st_geometry(cropOverlay)
+    cropOverlay<-sf::st_crop(cropOverlay,xmin=x0,ymin=y0,xmax=xm,ymax=ym)
+    plot(cropOverlay,
+         col=col,
+         border=border,
+         add=T)
+  }
 
   if (frame) rect(x0,y0,xm,ym)
 

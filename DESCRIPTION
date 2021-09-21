@@ -34,6 +34,7 @@ Imports:
     RColorBrewer,
     scales,
     sf,
+    rgdal,
     shiny,
     shinyBS,
     shinydashboard,

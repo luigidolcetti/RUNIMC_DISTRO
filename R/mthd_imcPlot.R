@@ -20,6 +20,11 @@ setGeneric("imcPlot", function(x,uid,channels,
                                minorT = 1,
                                cex.mnt = 40,
                                legend=T,
+                               legend.position = c('b','t'),
+                               cex.legend = 0.8,
+                               overlay =NULL,
+                               col = NULL,
+                               border = 'cyan',
                                ...)
            standardGeneric("imcPlot"))
 
@@ -37,6 +42,11 @@ setMethod('imcPlot',signature = ('IMC_Study'),
                    minorT = 1,
                    cex.mnt = 40,
                    legend=T,
+                   legend.position = c('b','t'),
+                   cex.legend = 0.8,
+                   overlay =NULL,
+                   col = NULL,
+                   border = 'cyan',
                    ...){
 
             if (missing(channels)) stop(mError('specify channels'),call. = F)
@@ -104,7 +114,19 @@ setMethod('imcPlot',signature = ('IMC_Study'),
             origin<-Reduce('=',lapply(rst,'[[','origin'))
             rst<-array(unlist(rrs,recursive = F),dim = c(nrs,ncs,length(rrs)))
 
-            if (legend) layout(matrix(c(2,1),ncol=1),widths = 1,heights = c(1,3))
+            if (legend) {
+
+              legend.position<-match.arg(legend.position,c('b','t'),F)
+              switch (legend.position,
+                      t = layout(matrix(c(2,1),ncol=1),widths = 1,heights = c(1,3)),
+                      b = layout(matrix(c(1,2),ncol=1),widths = 1,heights = c(3,1))
+              )
+
+            }
+
+            if (!is.null(overlay)){
+              overlay<-x$currentAnalysis$exprs@exprs[[overlay]]
+            }
 
             pl<-rstPlot(x = rst,
                         quantCap = quantCap,
@@ -116,17 +138,24 @@ setMethod('imcPlot',signature = ('IMC_Study'),
                         origin = origin,
                         cex.mjt = cex.mjt,
                         cex.mnt = cex.mnt,
-                        asp = 1)
+                        asp = 1,
+                        uid = uid,
+                        overlay = overlay,
+                        col = col,
+                        border = border
+            )
+
 
             if (legend){
+
 
               textOut<-studyTable(x)
               rownames(textOut)<-NULL
               textOutSub<-textOut[textOut$uid==uid,]
-             textOutSub<-unlist(lapply(seq_along(colnames(textOut)),
-                                function(i){
-                                  paste0(colnames(textOut)[i],': ',textOutSub[i])
-                                }))
+              textOutSub<-unlist(lapply(seq_along(colnames(textOut)),
+                                        function(i){
+                                          paste0(colnames(textOut)[i],': ',textOutSub[i])
+                                        }))
               textOut<-paste0(textOutSub[1],'\n',
                               textOutSub[5],'/ ',
                               textOutSub[6],'/ ',
@@ -136,7 +165,7 @@ setMethod('imcPlot',signature = ('IMC_Study'),
                                    scaleCol = T,
                                    scaleBar = T,
                                    chNames=channels,
-                                   cex = 0.8,
+                                   cex = cex.legend,
                                    textC=textOut)
             }
 
