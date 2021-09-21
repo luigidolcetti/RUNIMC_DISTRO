@@ -14,7 +14,12 @@ quantNorm<-function(fn_dt,
     }
   imgOut<-fn_dt
   imgOut[imgOut>maxVal]<-maxVal
-  imgOut<-(imgOut-min(imgOut))/(max(imgOut)-min(imgOut))
+
+  if (any(class(imgOut)=='RasterLayer')){
+    imgOut<-(imgOut-raster::minValue(imgOut))/(raster::maxValue(imgOut)-raster::minValue(imgOut))
+  } else {
+    imgOut<-(imgOut-min(imgOut))/(max(imgOut)-min(imgOut))
+  }
   return(imgOut)
 
 }
