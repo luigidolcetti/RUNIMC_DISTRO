@@ -4,7 +4,28 @@
 \alias{imcPlot}
 \title{Plot}
 \usage{
-imcPlot(x, uid, channels, ...)
+imcPlot(
+  x,
+  uid,
+  channels,
+  xlim = NULL,
+  ylim = NULL,
+  quantCap = 1,
+  frame = T,
+  tick = T,
+  res = c(1, 1),
+  majorT = 10,
+  cex.mjt = 20,
+  minorT = 1,
+  cex.mnt = 40,
+  legend = T,
+  legend.position = c("b", "t"),
+  cex.legend = 0.8,
+  overlay = NULL,
+  col = NULL,
+  border = "cyan",
+  ...
+)
 }
 \arguments{
 \item{x}{IMC_study, a study}

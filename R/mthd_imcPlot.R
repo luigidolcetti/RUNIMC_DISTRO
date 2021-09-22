@@ -70,7 +70,7 @@ setMethod('imcPlot',signature = ('IMC_Study'),
               if (any(ch %in% lylst$calc)){
                 return(list(org='calc',ch=ch))
               }
-              if (any(ch %in% lylst$raw)){
+              if (any(ch %in% lylst$class)){
                 return(list(org='class',ch=ch))
               }
 

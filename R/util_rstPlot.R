@@ -56,6 +56,7 @@ rstPlot<-function(x,
        ann=F)
 
 
+  xTrans[is.na(xTrans)]<-0
   rasterImage(xTrans,x0,y0,xm,ym,interpolate = F)
 
   if (is.null(uid)) warning(mWarning('uid missing, overlay polygons will not be dispayed'))
@@ -152,7 +153,7 @@ rstLegend_continuous<-function(Rplot=NULL,
            leftMargin+(xmLeader- x0Leader)/2
            ,10*sloty)
 
-      quanX<-quantile(Rplot$x[Rplot$x>0],Rplot$quantCap)
+      quanX<-quantile(Rplot$x[Rplot$x>0],Rplot$quantCap,na.rm=T)
       adjX<-Rplot$x
       adjX[adjX>quanX]<-quanX
       adjX<-(adjX-min(adjX))/(max(adjX)-min(adjX))
@@ -163,7 +164,7 @@ rstLegend_continuous<-function(Rplot=NULL,
       lines(adjX,col='blue')
 
       realXmax<-formatC(max(Rplot$x),digits = 1)
-      quanXmax<-formatC(quantile(Rplot$x[Rplot$x>0],Rplot$quantCap),digits = 1)
+      quanXmax<-formatC(quantile(Rplot$x[Rplot$x>0],Rplot$quantCap,na.rm=T),digits = 1)
       text(leftMargin,
            sloty*9.5,
            '0 -',
@@ -197,7 +198,7 @@ rstLegend_continuous<-function(Rplot=NULL,
              9*sloty,
              leftMargin+totLengthScl*i-(enlrg*totLengthScl),
              10*sloty)
-        quanX<-quantile(Rplot$x[Rplot$x>0],Rplot$quantCap[i])
+        quanX<-quantile(Rplot$x[Rplot$x>0],Rplot$quantCap[i],na.rm=T)
         adjX<-Rplot$x
         adjX[adjX>quanX]<-quanX
         adjX<-(adjX-min(adjX))/(max(adjX)-min(adjX))

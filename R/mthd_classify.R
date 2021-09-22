@@ -131,14 +131,29 @@ setMethod('classify',signature = ('IMC_Study'),
 
                      if (is.null(x$currentAnalysis$classification)) stop(mError('coud not find any classification'))
 
+                     if (!is.na(cl)){
 
-                     newClassification<-randomOnions(fn_rstStack=x$currentAnalysis$classification,
+                       newClassification<-randomOnions_parallel(fn_rstStack=x$currentAnalysis$classification,
+                                                       fn_layerLabel=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$classificationLyr,
+                                                       fn_label=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$labels,
+                                                       fn_prefix=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$prefix,
+                                                       fn_raster=x$raster,
+                                                       fn_derivedRaster=x$currentAnalysis$derivedRasters,
+                                                       fn_classifiers = x$currentAnalysis$classifier[[method]],
+                                                       cl=cl)
+
+                     } else {
+
+                       newClassification<-randomOnions(fn_rstStack=x$currentAnalysis$classification,
                                                      fn_layerLabel=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$classificationLyr,
                                                      fn_label=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$labels,
                                                      fn_prefix=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$prefix,
                                                      fn_raster=x$raster,
                                                      fn_derivedRaster=x$currentAnalysis$derivedRasters,
                                                      fn_classifiers = x$currentAnalysis$classifier[[method]])
+
+                     }
+
 
                      newClassification<-new('IMC_Classification',newClassification)
 

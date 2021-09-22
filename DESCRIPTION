@@ -74,6 +74,7 @@ Collate:
     'engine_monkeyForest.R'
     'engine_pandaMap.R'
     'engine_randomOnions.R'
+    'engine_randomOnions_parallel.R'
     'engine_spiderMap.R'
     'fun_IMCstackOpen.R'
     'fun_IMCstackSave.R'

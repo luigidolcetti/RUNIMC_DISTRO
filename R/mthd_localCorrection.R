@@ -22,6 +22,7 @@ setGeneric("localCorrection", function(x,
                                        suffix = '_clean',
                                        matrixExtent = 3,
                                        paddingLabel = 'undetermined',
+                                       cl=NA,
                                        ...)
   standardGeneric("localCorrection"))
 
@@ -33,6 +34,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                    suffix = '_clean',
                    matrixExtent = 3,
                    paddingLabel = 'undetermined',
+                   cl=NA,
                    ...){
 
             chkLayer<-lapply(x$currentAnalysis$classification,names)
@@ -68,7 +70,64 @@ setMethod('localCorrection',signature = ('IMC_Study'),
 
             oldStk<-as.list(x$currentAnalysis$classification)
 
-            newStk<-sapply(uids,function(i){
+            if (!is.na(cl)){
+
+              cl<-parallel::makeCluster(cl)
+              parallel::clusterExport(cl,
+                                      varlist = c(
+                                        'oldStk',
+                                        'labelLayer',
+                                        'matrixExtent',
+                                        'pdv'),
+                                      envir = environment())
+
+              newStk<-parallel::parLapply(setNames(uids,uids),function(i){
+
+                rst<-oldStk[[i]][[labelLayer]]
+                filePath<-raster::filename(rst)
+                fileN<-fs::path_file(filePath)
+                fileD<-fs::path_dir(filePath)
+                fileE<-sub('.*\\.', '',fileN)
+                fileNN<-sub('\\.[^.]*$','',fileN)
+                newRst<-raster::focal(x = rst,
+                                      w = matrix(1, ncol=matrixExtent,nrow = matrixExtent),
+                                      fun = function(x){
+                                        tableX<-table(x)
+                                        wM<-which.max(tableX)[1]
+                                        nV<-as.numeric(names(tableX)[wM])
+                                        return(nV)
+                                      },
+                                      pad=T,
+                                      padValue=pdv,
+                                      overwrite = T,
+                                      progress='text')
+                newRst<-raster::ratify(newRst)
+                levels(newRst)<-raster::levels(rst)
+                newName<-paste0(labelLayer,suffix)
+                names(newRst)<-newName
+                newRst<-raster::writeRaster(newRst,
+                                            filename = file.path(fileD,
+                                                                 paste0(fileNN,suffix,'.',fileE)),
+                                            overwrite=T,
+                                            format='raster')
+                oldStk[[i]][[newName]]<-newRst
+
+                fpt<-raster::filename(oldStk[[i]])
+                rstrStk<-IMCstackSave(oldStk[[i]],fpt)
+
+                newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
+
+                attr(rstrStk,'mdtnTimeStmp')<-newTimeStmp
+                attr(rstrStk,'artnTimeStmp')<-newTimeStmp
+                attr(rstrStk,'fileArchive')<-fpt
+
+                return(rstrStk)
+              },cl=cl)
+
+              parallel::stopCluster(cl)
+            } else {
+
+              newStk<-sapply(uids,function(i){
 
               cat (paste0('cleaning up ',labelLayer,' of ',i,'\n'))
               rst<-oldStk[[i]][[labelLayer]]
@@ -112,7 +171,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
               return(rstrStk)
             })
 
-
+            }
 
             newClassification<-new('IMC_Classification',newStk)
 
