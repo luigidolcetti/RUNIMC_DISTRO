@@ -8,12 +8,12 @@
 #'
 #' }
 #' @export
-setGeneric("classify", function(x,method=NULL,update=T,...)
+setGeneric("classify", function(x,method=NULL,update=T,cl=NA,...)
   standardGeneric("classify"))
 
 
 setMethod('classify',signature = ('IMC_Study'),
-          function(x,method=NULL,update=T,...){
+          function(x,method=NULL,update=T,cl=NA,...){
 
             if (is.null(x$currentAnalysis$classifier)) stop(mError('coud not find a classification model to apply'))
             if (is.null(method)) stop(mError('specify what method to use'))
@@ -22,8 +22,59 @@ setMethod('classify',signature = ('IMC_Study'),
                    randomForest = {
 
                      pFtr<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$predictiveFeatures
+                     pval<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$PvalueTreshold
                      rfCls<-x$currentAnalysis$classifier[[method]]
                      uids<-x$studyTable$uid
+
+                     if (!is.na(cl)){
+                       cl<-parallel::makeCluster(cl)
+
+                       parallel::clusterExport(cl = cl,
+                                               varlist = c(
+                                                 'pFtr',
+                                                 'rfCls',
+                                                 'uids',
+                                                 'pval'),
+                                               envir = environment())
+                       parallel::clusterExport(cl=cl,
+                                               varlist = c(
+                                                 'raster'),
+                                               envir = x)
+                       parallel::clusterExport(cl=cl,
+                                                varlist = c(
+                                                  'derivedRasters',
+                                                  'folder'),
+                                               envir = x$currentAnalysis)
+
+
+                       TEST_monkey<-parallel::parLapply(setNames(uids,uids),function(uid){
+                         rst<-list(raster[[uid]],derivedRasters[[uid]])
+                         rstrStk<-IMC_stack(x = rst,
+                                            uid = raster[[uid]]@uid,
+                                            IMC_text_file = raster[[uid]]@IMC_text_file,
+                                            study = raster[[uid]]@study,
+                                            sample = raster[[uid]]@sample,
+                                            replicate = raster[[uid]]@replicate,
+                                            ROI = raster[[uid]]@ROI,
+                                            bioGroup = raster[[uid]]@bioGroup,
+                                            channels = raster[[uid]]@channels,
+                                            type = 'class')
+
+                         fn_filePath<-file.path(folder,
+                                                'test/classification')
+                         checkDir(fn_filePath,'rasters',verbose=F)
+                         checkDir(fn_filePath,'rasterStacks',verbose=F)
+
+                         mf<-monkeyForest(fn_rst =rstrStk,
+                                          fn_layers = pFtr,
+                                          fn_newLayerName = 'label',
+                                          fn_undeterminedLabel='undetermined',
+                                          fn_Ptreshold=pval,
+                                          fn_forest =rfCls,
+                                          fn_filePath = fn_filePath)},cl = cl)
+
+                       parallel::stopCluster(cl = cl)
+                     } else {
 
                      TEST_monkey<-sapply(uids,function(uid){
                        rst<-list(x$raster[[uid]],x$currentAnalysis$derivedRasters[[uid]])
@@ -41,8 +92,8 @@ setMethod('classify',signature = ('IMC_Study'),
 
                        fn_filePath<-file.path(x$currentAnalysis$folder,
                                               'test/classification')
-                       checkDir(fn_filePath,'rasters')
-                       checkDir(fn_filePath,'rasterStacks')
+                       checkDir(fn_filePath,'rasters',verbose=F)
+                       checkDir(fn_filePath,'rasterStacks',verbose=F)
 
                        mf<-monkeyForest(fn_rst =rstrStk,
                                         fn_layers = pFtr,
@@ -51,6 +102,8 @@ setMethod('classify',signature = ('IMC_Study'),
                                         fn_Ptreshold=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$PvalueTreshold,
                                         fn_forest =rfCls,
                                         fn_filePath = fn_filePath)},USE.NAMES = T)
+
+                     }
 
                      if (is.null(x$currentAnalysis$classification)){
                        newClassification<-TEST_monkey
