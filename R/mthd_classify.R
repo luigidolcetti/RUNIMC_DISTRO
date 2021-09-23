@@ -140,6 +140,7 @@ setMethod('classify',signature = ('IMC_Study'),
                                                        fn_raster=x$raster,
                                                        fn_derivedRaster=x$currentAnalysis$derivedRasters,
                                                        fn_classifiers = x$currentAnalysis$classifier[[method]],
+                                                       fn_analysisFolder = x$currentAnalysis$folder,
                                                        cl=cl)
 
                      } else {

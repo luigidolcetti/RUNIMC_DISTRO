@@ -6,11 +6,14 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                                 fn_label=NULL,
                                 fn_classifiers=NULL,
                                 fn_prefix='topoMap_',
-                                cl = NA){
+                                fn_analysisFolder=NULL,
+                                cl = NA,
+                                ...){
 
-  if (is.null(fn_layerLabel)) stop(mError('no classification layer specified'))
-  if (is.null(fn_label)) stop(mError('no classification label specified'))
-  if (is.null(cl)) stop (mError('use the non-parallel randomOnions()'))
+  if (is.null(fn_layerLabel)) stop(mError('no classification layer specified'),call. = F)
+  if (is.null(fn_label)) stop(mError('no classification label specified'),call. = F)
+  if (is.null(cl)) stop (mError('use the non-parallel randomOnions()'),call. = F)
+  if (is.null(fn_analysisFolder)) stop (mError('analysis Folder cannot be NULL'),call. = F)
 
 
   smpCl<-names(fn_rstStack)
@@ -23,8 +26,8 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                             'fn_derivedRaster',
                             'fn_raster',
                             'fn_label',
-                            'fn_layerLabel'
-
+                            'fn_layerLabel',
+                            'fn_analysisFolder'
                           ),
                           envir = environment())
 
@@ -50,7 +53,12 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
         fn_rstStack[[smp]][[fn_layerLabel]]==x
       })
       labelMask<-raster::stack(labelMask)
-      labelMask<-raster::calc(labelMask,sum)
+      labelMask<-raster::calc(labelMask,
+                              sum,
+                              filename = file.path(fn_analysisFolder,
+                                                   'Temp',
+                                                   paste0('TEMP_CLASS_MASK_',smp,'_',lbl,'.nc')),
+                              overwrite=T)
 
       return(labelMask)
     })
@@ -61,15 +69,15 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
 
   parallel::clusterExport(cl,
                           c('superRaster',
-                          'classMask',
-                          'fn_classifiers',
-                          'fn_prefix'),
+                            'classMask',
+                            'fn_classifiers',
+                            'fn_prefix'),
                           envir = environment())
 
   classOut<-parallel::parLapply(setNames(smpCl,smpCl),function(smp){
 
     labelOut<-lapply(setNames(fn_label,fn_label),function(lbl){
-
+browser()
       if (is.null(fn_classifiers[[lbl]])){
         outRst<-classMask[[smp]][[lbl]]
         outRst[outRst==0]<-NA
@@ -77,25 +85,31 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
         maskedRaster<-raster::mask(x=superRaster[[smp]],
                                    mask = classMask[[smp]][[lbl]],
                                    maskvalue=1,
-                                   inverse=T)
+                                   inverse=T,
+                                   filename=file.path(fn_analysisFolder,
+                                                      'Temp',
+                                                      paste0('TEMP_PREDICT_CLASS_MASK_',smp,'_',lbl,'.nc')),
+                                   overwrite=T)
+
+        names(maskedRaster)<-names(superRaster[[smp]])
+
+        filePath<-raster::filename(fn_rstStack[[smp]][[fn_layerLabel]])
+        filePath<-DescTools::SplitPath(filePath)
+        fileObjective<-file.path(filePath$drive,filePath$dirname,paste0(fn_prefix,lbl,'.',filePath$extension))
+
         outRst<-raster::predict(maskedRaster,
                                 fn_classifiers[[lbl]],
                                 na.rm=T,
-                                progress='text')
+                                progress='text',
+                                filename = fileObjective,
+                                overwrite=T,
+                                format='raster')
+
+        names(outRst)<-paste0(fn_prefix,lbl)
       }
 
-      names(outRst)<-paste0(fn_prefix,lbl)
-      # if (!is.null(fn_filePath)){
-      filePath<-raster::filename(fn_rstStack[[smp]][[fn_layerLabel]])
-      filePath<-DescTools::SplitPath(filePath)
-      fileObjective<-file.path(filePath$drive,filePath$dirname,paste0(fn_prefix,lbl,'.',filePath$extension))
-      raster::writeRaster(x = outRst,
-                          filename = fileObjective,
-                          overwrite=T,
-                          format='raster')
+      unlink(raster::filename(maskedRaster))
 
-      outRst<-raster::raster(fileObjective)
-      # }
       return(outRst)
     })
 
@@ -120,6 +134,12 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
   },cl = cl)
 
   parallel::stopCluster(cl)
+
+  lapply(setNames(smpCl,smpCl),function(smp){
+    out<-lapply(setNames(fn_label,fn_label),function(lbl){
+      unlink(raster::filename(classMask[[smp]][[lbl]]))
+    })
+  })
 
   return(classOut)
 }

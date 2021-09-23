@@ -64,6 +64,7 @@ initStudy<-function(fn_studyName='IMCstudy',
   stackFolder<-checkDir(studyFolder,'rasterStacks',verbose=fn_verbose)
   analysisFolder<-checkDir(studyFolder,'analysis',verbose=fn_verbose)
   archiveFolder<-checkDir(studyFolder,'archive',verbose=fn_verbose)
+  TempFolder<-checkDir(studyFolder,'Temp',verbose=fn_verbose)
 
   rawDataFiles<-list.files(fn_rawDataFolder,full.names = T,pattern = '*.txt',recursive = F)
   if (length(rawDataFiles)==0) stop(mError("Could not find any raw data"),call. = F)
@@ -111,18 +112,6 @@ initStudy<-function(fn_studyName='IMCstudy',
         mrkr<-'(..??..)'
         if (fn_whichColumns=='named') ldld<-NA
       }
-
-      # mstrhdrSplit<-strsplit(mstrhdr,'-')[[1]]
-      # if (length(mstrhdrSplit)==1){
-      #   chnl<-gsub("\\(.+?\\)", "", mstrhdrSplit[1])
-      #   mrkr<-''
-      #   if (fn_whichColumns=='named') ldld<-F
-      # } else
-      #   if (length(mstrhdrSplit)>=2){
-      #     chnl<-mstrhdrSplit[1]
-      #     mrkr<-gsub("\\(.+?\\)", "", paste0(mstrhdrSplit[-1], collapse = "-"))
-      #     if (fn_whichColumns=='named') ldld<-T
-      #   } else {stop('Something weird whith the raw files...')}
 
       chnls<-data.frame(columnNames=mstrhdr,
                         RcolumnNames=tolower(make.names(mstrhdr,unique = F,allow_ = F)),

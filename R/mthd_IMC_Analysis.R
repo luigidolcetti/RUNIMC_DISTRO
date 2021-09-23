@@ -46,6 +46,8 @@ setMethod('newAnalysis',signature = ('IMC_Study'),
             checkDir(x$currentAnalysis$folder,'test/polygons')
             checkDir(x$currentAnalysis$folder,'test/classification')
             checkDir(x$currentAnalysis$folder,'archive')
+            checkDir(x$currentAnalysis$folder,'Temp')
+
 
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
             attr(x,'mdtnTimeStmp')<-newTimeStmp
