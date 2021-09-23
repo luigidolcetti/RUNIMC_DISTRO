@@ -32,7 +32,7 @@ loadTxtToStack<-function(fn_path=NULL,
                          fn_channel=NULL,
                          fn_trsh=0.965,
                          fn_zeroOff=T,
-                         fn_verbose=T){
+                         fn_verbose=F){
 
   if (!all(names(fn_details) %in% c('study','sample','ROI','replicate','bioGroup'))) {stop("Please, details accepts only 'study', 'sample', 'replicate', 'ROI', 'bioGroup")}
   if (!dir.exists(fn_path)) {stop("could not find path")}

@@ -25,6 +25,7 @@ setMethod('classify',signature = ('IMC_Study'),
                      pval<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$PvalueTreshold
                      rfCls<-x$currentAnalysis$classifier[[method]]
                      uids<-x$studyTable$uid
+                     tempPath<-file.path(x$currentAnalysis$folder,'Temp')
 
                      if (!is.na(cl)){
                        cl<-parallel::makeCluster(cl)
@@ -34,6 +35,7 @@ setMethod('classify',signature = ('IMC_Study'),
                                                  'pFtr',
                                                  'rfCls',
                                                  'uids',
+                                                 'tempPath',
                                                  'pval'),
                                                envir = environment())
                        parallel::clusterExport(cl=cl,
@@ -71,7 +73,9 @@ setMethod('classify',signature = ('IMC_Study'),
                                           fn_undeterminedLabel='undetermined',
                                           fn_Ptreshold=pval,
                                           fn_forest =rfCls,
-                                          fn_filePath = fn_filePath)},cl = cl)
+                                          fn_filePath = fn_filePath,
+                                          fn_uid = uid,
+                                          fn_TempPath = tempPath)},cl = cl)
 
                        parallel::stopCluster(cl = cl)
                      } else {
@@ -101,7 +105,9 @@ setMethod('classify',signature = ('IMC_Study'),
                                         fn_undeterminedLabel='undetermined',
                                         fn_Ptreshold=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$PvalueTreshold,
                                         fn_forest =rfCls,
-                                        fn_filePath = fn_filePath)},USE.NAMES = T)
+                                        fn_filePath = fn_filePath,
+                                        fn_uid = uid,
+                                        fn_TempPath = tempPath)},USE.NAMES = T)
 
                      }
 
@@ -151,7 +157,8 @@ setMethod('classify',signature = ('IMC_Study'),
                                                      fn_prefix=x$currentAnalysis$classificationDirectives[[method]]@methodParameters$prefix,
                                                      fn_raster=x$raster,
                                                      fn_derivedRaster=x$currentAnalysis$derivedRasters,
-                                                     fn_classifiers = x$currentAnalysis$classifier[[method]])
+                                                     fn_classifiers = x$currentAnalysis$classifier[[method]],
+                                                     fn_analysisFolder = x$currentAnalysis$folder)
 
                      }
 

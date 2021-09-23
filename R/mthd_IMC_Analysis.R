@@ -17,11 +17,11 @@
 #' newAnalysis(MyStudy, 'MyFirstAnalysis')
 #' }
 #' @export
-setGeneric("newAnalysis", function(x,analysisName=NULL,...)
+setGeneric("newAnalysis", function(x,analysisName=NULL,verbose=F,...)
   standardGeneric("newAnalysis"))
 
 setMethod('newAnalysis',signature = ('IMC_Study'),
-          function(x,analysisName=NULL,...){
+          function(x,analysisName=NULL,verbose=F,...){
 
             if (is.null(analysisName)) {stop(mError('\nPlease, provide a name for this analysis'),call. = F)}
 
@@ -38,15 +38,15 @@ setMethod('newAnalysis',signature = ('IMC_Study'),
 
             x$currentAnalysis$folder<-checkDir(paste(x$rootFolder,x$name,'analysis',sep='/'),x$currentAnalysis$name)
 
-            checkDir(x$currentAnalysis$folder,'rasters')
-            checkDir(x$currentAnalysis$folder,'rasterStacks')
-            checkDir(x$currentAnalysis$folder,'training')
-            checkDir(x$currentAnalysis$folder,'training/polygons')
-            checkDir(x$currentAnalysis$folder,'test')
-            checkDir(x$currentAnalysis$folder,'test/polygons')
-            checkDir(x$currentAnalysis$folder,'test/classification')
-            checkDir(x$currentAnalysis$folder,'archive')
-            checkDir(x$currentAnalysis$folder,'Temp')
+            checkDir(x$currentAnalysis$folder,'rasters',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'rasterStacks',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'training',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'training/polygons',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'test',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'test/polygons',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'test/classification',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'archive',verbose=verbose)
+            checkDir(x$currentAnalysis$folder,'Temp',verbose=verbose)
 
 
             newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())

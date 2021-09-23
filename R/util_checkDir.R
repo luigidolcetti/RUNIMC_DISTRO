@@ -3,12 +3,12 @@
 #'
 checkDir<-function(parentalFolder,
                    childFolder,
-                   verbose=T){
+                   verbose=F){
 
   folderList<-dir(parentalFolder)
 
   if (!(any (childFolder %in% folderList))){
-    dir.create(paste0(parentalFolder,'/',childFolder))
+    dir.create(file.path(parentalFolder,childFolder),showWarnings = F)
 
     if (verbose) {
       lenPF<-nchar(parentalFolder)
@@ -20,16 +20,18 @@ checkDir<-function(parentalFolder,
         lenPF<-parentalFolder
       }
 
-        message(mMessage(paste0('\n',
-                                childFolder,
-                                ' folder created in ',
-                                outPF)))}
+      message(mMessage(paste0('\n',
+                              childFolder,
+                              ' folder created in ',
+                              outPF)))}
 
-      return(file.path(parentalFolder,childFolder))
-    }
-    if (verbose) {
-      message(mWarning(paste0('\n',childFolder, ' folder already exist, nothing to do')))
-    return(paste(parentalFolder,childFolder,sep='/'))
-    }
+    return(file.path(parentalFolder,childFolder))
+  }
+
+  if (verbose) {
+    message(mWarning(paste0('\n',childFolder, ' folder already exist, nothing to do')))
 
   }
+
+  return(file.path(parentalFolder,childFolder))
+}

@@ -89,6 +89,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                 fileD<-fs::path_dir(filePath)
                 fileE<-sub('.*\\.', '',fileN)
                 fileNN<-sub('\\.[^.]*$','',fileN)
+                TEMPfile<-file.path(x$currentAnalysis$folder,'Temp',paste0('TEMP_',fileNN,suffix,'.nc'))
                 newRst<-raster::focal(x = rst,
                                       w = matrix(1, ncol=matrixExtent,nrow = matrixExtent),
                                       fun = function(x){
@@ -100,7 +101,8 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                       pad=T,
                                       padValue=pdv,
                                       overwrite = T,
-                                      progress='text')
+                                      progress='text',
+                                      filename=TEMPfile)
                 newRst<-raster::ratify(newRst)
                 levels(newRst)<-raster::levels(rst)
                 newName<-paste0(labelLayer,suffix)
@@ -110,6 +112,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                                                  paste0(fileNN,suffix,'.',fileE)),
                                             overwrite=T,
                                             format='raster')
+                unlink(TEMPfile)
                 oldStk[[i]][[newName]]<-newRst
 
                 fpt<-raster::filename(oldStk[[i]])
@@ -127,7 +130,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
               parallel::stopCluster(cl)
             } else {
 
-              newStk<-sapply(uids,function(i){
+              newStk<-lapply(setNames(uids,uids),function(i){
 
               cat (paste0('cleaning up ',labelLayer,' of ',i,'\n'))
               rst<-oldStk[[i]][[labelLayer]]
@@ -136,6 +139,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
               fileD<-fs::path_dir(filePath)
               fileE<-sub('.*\\.', '',fileN)
               fileNN<-sub('\\.[^.]*$','',fileN)
+              TEMPfile<-file.path(x$currentAnalysis$folder,'Temp',paste0('TEMP_',fileNN,suffix,'.nc'))
               newRst<-raster::focal(x = rst,
                                     w = matrix(1, ncol=matrixExtent,nrow = matrixExtent),
                                     fun = function(x){
@@ -147,7 +151,8 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                     pad=T,
                                     padValue=pdv,
                                     overwrite = T,
-                                    progress='text')
+                                    progress='text',
+                                    filename=TEMPfile)
               newRst<-raster::ratify(newRst)
               levels(newRst)<-raster::levels(rst)
               newName<-paste0(labelLayer,suffix)
@@ -157,6 +162,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                                                paste0(fileNN,suffix,'.',fileE)),
                                           overwrite=T,
                                           format='raster')
+              unlink(TEMPfile)
               oldStk[[i]][[newName]]<-newRst
 
               fpt<-raster::filename(oldStk[[i]])

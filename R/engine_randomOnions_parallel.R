@@ -77,10 +77,15 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
   classOut<-parallel::parLapply(setNames(smpCl,smpCl),function(smp){
 
     labelOut<-lapply(setNames(fn_label,fn_label),function(lbl){
-browser()
+
       if (is.null(fn_classifiers[[lbl]])){
         outRst<-classMask[[smp]][[lbl]]
         outRst[outRst==0]<-NA
+        names(outRst)<-paste0(fn_prefix,lbl)
+        outRst<-raster::writeRaster(outRst,
+                                    filename = fileObjective,
+                                    overwrite=T,
+                                    format='raster')
       } else {
         maskedRaster<-raster::mask(x=superRaster[[smp]],
                                    mask = classMask[[smp]][[lbl]],
@@ -100,15 +105,13 @@ browser()
         outRst<-raster::predict(maskedRaster,
                                 fn_classifiers[[lbl]],
                                 na.rm=T,
-                                progress='text',
                                 filename = fileObjective,
                                 overwrite=T,
                                 format='raster')
 
         names(outRst)<-paste0(fn_prefix,lbl)
+        unlink(raster::filename(maskedRaster))
       }
-
-      unlink(raster::filename(maskedRaster))
 
       return(outRst)
     })

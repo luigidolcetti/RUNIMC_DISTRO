@@ -11,7 +11,9 @@ monkeyForest(
   fn_undeterminedLabel = "undetermined",
   fn_Ptreshold = 0,
   fn_forest = NULL,
-  fn_filePath = NULL
+  fn_filePath = NULL,
+  fn_uid = NULL,
+  fn_TempPath = NULL
 )
 }
 \description{

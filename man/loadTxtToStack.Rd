@@ -20,7 +20,7 @@ loadTxtToStack(
   fn_channel = NULL,
   fn_trsh = 0.965,
   fn_zeroOff = T,
-  fn_verbose = T
+  fn_verbose = F
 )
 }
 \arguments{

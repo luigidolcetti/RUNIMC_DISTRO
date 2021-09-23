@@ -132,7 +132,7 @@ initStudy<-function(fn_studyName='IMCstudy',
 
   rst<-lapply(rawDataFiles,
               function(tblFile){
-                oneRasterFolder<-checkDir(rasterFolder,tblFile)
+                oneRasterFolder<-checkDir(rasterFolder,tblFile,verbose=fn_verbose)
                 rst<-loadTxtToStack(fn_path = fn_rawDataFolder,
                                     fn_file = tblFile,
                                     fn_rasterDBPath = oneRasterFolder,
@@ -147,6 +147,7 @@ initStudy<-function(fn_studyName='IMCstudy',
                                     fn_y_column = fn_y_column,
                                     fn_trsh = NULL,
                                     fn_zeroOff = NULL,
+                                    fn_verbose = fn_verbose,
                                     ...)
                 return(rst)})
 

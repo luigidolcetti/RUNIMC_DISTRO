@@ -34,9 +34,10 @@ setGeneric("addFilter", function(x,filter=NULL,parameters=NULL,channels=NULL,app
 setMethod('addFilter',signature = ('IMC_Study'),
           function(x,filter=NULL,parameters=NULL,channels=NULL,append=T,...){
 
-            if (is.null(filter)) stop(mError('provide Filter'))
-            if (is.null(parameters)) stop(mError(paste0('provide parameters for ',filter,' filter')))
-            if (is.null(channels)) stop(mError(paste0('provide channels to elaborate with ',filter,' filter')))
+            if (is.null(filter)) stop(mError('provide Filter'),call. = F)
+            if (is.null(parameters)) stop(mError(paste0('provide parameters for ',filter,' filter')),call. = F)
+            if (is.null(channels)) stop(mError(paste0('provide channels to elaborate with ',filter,' filter')),call. = F)
+            if (is.null(x$currentAnalysis)) stop(mError('initialize an analysis with newAnalysis()'),call. = F)
             if (append) x$currentAnalysis$filters<-x$currentAnalysis$filters else x$currentAnalysis$filters<-NULL
             if (is.null(x$currentAnalysis$filters)) {
               newFilter<-new('IMC_FilterFrame')

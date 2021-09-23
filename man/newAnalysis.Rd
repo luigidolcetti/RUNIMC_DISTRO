@@ -4,7 +4,7 @@
 \alias{newAnalysis}
 \title{Create a new Analysis}
 \usage{
-newAnalysis(x, analysisName = NULL, ...)
+newAnalysis(x, analysisName = NULL, verbose = F, ...)
 }
 \arguments{
 \item{x}{IMC_Study, a study.}

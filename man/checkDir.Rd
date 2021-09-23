@@ -4,7 +4,7 @@
 \alias{checkDir}
 \title{Some nice thing}
 \usage{
-checkDir(parentalFolder, childFolder, verbose = T)
+checkDir(parentalFolder, childFolder, verbose = F)
 }
 \description{
 Some nice thing
