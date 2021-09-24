@@ -13,8 +13,7 @@ pandaMap<-function (fn_srt=NULL,
                     fn_movingWindow_dim = NULL,
                     fn_movingWindow_overlap = 25:50,
                     fn_cores=parallel::detectCores(logical = T)-1,
-                    fn_verbose = F,
-                    fn_TempFile = NULL){
+                    fn_verbose = F){
 
 
   drct<-as.numeric(match.arg(fn_clpDir))
@@ -157,18 +156,7 @@ pandaMap<-function (fn_srt=NULL,
                                  directions = drct,
                                  gaps = F)
       newStars<-stars::st_as_stars(clippingMap)
-
       clippingPolygon<-sf::st_as_sf(newStars,merge=T)
-
-      flNms<-raster::filename(clippingMap)
-
-      if (flNms!="") {
-        unlink(flNms)
-      }
-
-      rm (clippingMap)
-      rm (newStars)
-
       #### try that
       if (any(duplicated(clippingPolygon$clumps))){
 
@@ -658,13 +646,6 @@ pandaMap<-function (fn_srt=NULL,
     return(targetSF)
   })
 
-  flNms<-lapply(newSrt,function(x){
-    flNms<-raster::filename(x)
-    if (flNms!='') unlink(flNms)
-  })
-
-  rm(newSrt)
-
   if (!is.null(cl)) parallel::stopCluster(cl)
 
   if (length(MULTIOUT)==1) {
@@ -773,7 +754,6 @@ pandaMap<-function (fn_srt=NULL,
 
   OUT<-OUT[order(OUT$tile_id,OUT$iland_id,OUT$clade_id,OUT$level_id,decreasing = T),]
 
-  sf::write_sf(OUT,file.path(fn_TempFile,paste0('TEMP_POLY_',fn_uid,'.sqlite')))
   return(OUT)
 }
 

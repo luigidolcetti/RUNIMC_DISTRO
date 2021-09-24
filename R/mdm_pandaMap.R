@@ -33,7 +33,8 @@ mdm_pandaMap<-function(x,labelLayer,mthd,mthdPrmtrs){
                     fn_movingWindow_dim = mthdPrmtrs$movingWindowDimension,
                     fn_movingWindow_overlap = mthdPrmtrs$overlapExtent,
                     fn_cores = mthdPrmtrs$numberOfCores,
-                    fn_verbose = mthdPrmtrs$verbose)
+                    fn_verbose = mthdPrmtrs$verbose,
+                    fn_TempFile = file.path(x$currentAnalysis$folder,'Temp'))
 
     })
     out<-do.call(rbind.data.frame,append(out,
