@@ -1,7 +1,7 @@
-mdm_pandaMap<-function(x,labelLayer,mthd,mthdPrmtrs){
+mdm_pandaMap<-function(x,labelLayer,uids,mthd,mthdPrmtrs){
 
 
-  rstNames<-names(x$currentAnalysis$classification)
+  rstNames<-uids
   rstNames<-setNames(rstNames,rstNames)
 
   rstToSegment<-lapply(rstNames,function(nms){
@@ -9,9 +9,6 @@ mdm_pandaMap<-function(x,labelLayer,mthd,mthdPrmtrs){
       stop(mError('Check classification layer name provided'))}
     return(x$currentAnalysis$classification[[nms]][[labelLayer]])
   })
-
-  rstNames<-names(rstToSegment)
-  rstNames<-setNames(rstNames,rstNames)
 
   polygonsList<-lapply(rstNames, function(rst){
     out<-lapply(setNames(labelLayer,labelLayer),function(i){

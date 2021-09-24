@@ -59,8 +59,11 @@ setMethod('extractTrainingFeatures',signature = ('IMC_Study'),
             SLI_min<-aggregate(SLI~parLabel+label,TEMP_value,min)
             SLI_med<-aggregate(SLI~parLabel+label,TEMP_value,median)
 
+            LBL_abundance<-aggregate(DFC~parLabel+label,TEMP_value,length)
+
             pixelPosition<-data.frame(parLabel = DFC_max$parLabel,
                                       label = DFC_max$label,
+                                      events = LBL_abundance$DFC,
                                       DFC_min = DFC_min$DFC,
                                       DFC_med = DFC_med$DFC,
                                       DFC_max = DFC_max$DFC,
