@@ -773,7 +773,7 @@ pandaMap<-function (fn_srt=NULL,
 
   OUT<-OUT[order(OUT$tile_id,OUT$iland_id,OUT$clade_id,OUT$level_id,decreasing = T),]
 
-  sf::write_sf(OUT,file.path(fn_TempFile,paste0('TEMP_POLY_',fn_uid,'.sqlite')))
+  sf::write_sf(OUT,file.path(fn_TempFile,paste0('TEMP_POLY_',fn_uid,'_',fn_primaryIndex,'.sqlite')),append = F)
   return(OUT)
 }
 

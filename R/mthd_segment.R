@@ -8,16 +8,18 @@
 #'
 #' }
 #' @export
-setGeneric("segment", function(x,labelLayer='label',...)
+setGeneric("segment", function(x,labelLayer='label',uids=st_uids(x),...)
   standardGeneric("segment"))
 
 setMethod('segment',signature = ('IMC_Study'),
-          function(x,labelLayer='label',...){
+          function(x,labelLayer='label',uids=st_uids(x),...){
 
             if (is.null(x$currentAnalysis$segmentationDirectives)) stop(mError('Before segmenting directives must be specified'))
 
             mthd<-x$currentAnalysis$segmentationDirectives@method
             mthdPrmtrs<-x$currentAnalysis$segmentationDirectives@methodParameters
+
+            if (!all(uids %in% st_uids(x))) stop(mError('some uids are wrong'))
 
             switch(mthd,
 
@@ -85,7 +87,7 @@ setMethod('segment',signature = ('IMC_Study'),
 
                    pandaMap = {
 
-                     out<-mdm_pandaMap(x,labelLayer,mthd,mthdPrmtrs)
+                     out<-mdm_pandaMap(x,labelLayer,uids,mthd,mthdPrmtrs)
 
                      newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
 
