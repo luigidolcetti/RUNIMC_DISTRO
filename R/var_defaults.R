@@ -31,6 +31,7 @@ methodParametersClassification<-list(
     responseVariable = 'label',
     predictiveFeatures = NULL ,
     labels = NULL,
+    eventNumbers=NULL,
     classificationLyr = 'label',
     prefix = 'topoMap_',
     ntree = NULL,
