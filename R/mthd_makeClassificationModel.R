@@ -59,16 +59,36 @@ setMethod('makeClassificationModel',signature = ('IMC_Study'),
                    randomOnions = {
 
                      Lvar<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$labels
+                     Nvar<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$eventNumbers
+
+                     if (!is.null(Nvar)){
+                       if (!all(names(Nvar) %in% Lvar) | !all(Lvar %in% names(Nvar))){
+                         stop(mError('events number do not match specified labels'))
+                       }
+                     }
+
                      rVar<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$responseVariable
                      pFtr<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$predictiveFeatures
                      cPrm<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters[!(names(x$currentAnalysis$classificationDirectives[[method]]@methodParameters) %in%c('responseVariable','predictiveFeatures','labels','classificationLyr','prefix'))]
                      cPrm<-cPrm[unlist(lapply(cPrm,function(x) !is.null(x)))]
                      # fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
                      rf_classifier<-lapply(setNames(Lvar,Lvar),function(lbl){
+
                        cat('Random Forest...:::',lbl,':::\n')
 
-                       rFcall<-c(list(x = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,pFtr],
-                                      y = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,rVar]),
+                       newData<-x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,c(rVar,pFtr),drop=F]
+
+                       if (!is.null(Nvar)){
+                         Nout<-Nvar[lbl]
+                         Nin<-nrow(newData)
+                         if (Nin>Nout){
+                           idN<-sample(1:Nin,Nout)
+                           newData<-newData[idN,]
+                         }
+                       }
+
+                       rFcall<-c(list(x = newData[,pFtr],
+                                      y = newData[,rVar]),
                                  cPrm)
                        rf<-do.call(randomForest::randomForest,rFcall)
                        return(rf)
