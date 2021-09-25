@@ -15,10 +15,12 @@ mdfObjectAttr<-function(x,
                         crtnTimeStmp,
                         mdtnTimeStmp,
                         artnTimeStmp,
-                        fileArchive){
-  attr(x,'crtnTimeStmp')<-crtnTimeStmp
-  attr(x,'mdtnTimeStmp')<-mdtnTimeStmp
-  attr(x,'artnTimeStmp')<-artnTimeStmp
-  attr(x,'fileArchive')<-fileArchive
+                        fileArchive,
+                        sealed){
+  if (!missing(crtnTimeStmp)) attr(x,'crtnTimeStmp')<-crtnTimeStmp
+  if (!missing(mdtnTimeStmp)) attr(x,'mdtnTimeStmp')<-mdtnTimeStmp
+  if (!missing(artnTimeStmp)) attr(x,'artnTimeStmp')<-artnTimeStmp
+  if (!missing(fileArchive)) attr(x,'fileArchive')<-fileArchive
+  if (!missing(sealed)) attr(x,'sealed')<-sealed
   return(x)
 }

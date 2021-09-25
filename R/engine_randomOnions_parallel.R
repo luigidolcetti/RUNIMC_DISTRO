@@ -20,6 +20,8 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
   smpRs<-names(fn_raster)
 
   cl<-parallel::makeCluster(cl)
+  on.exit(parallel::stopCluster(cl))
+
   parallel::clusterExport(cl,
                           varlist = c(
                             'fn_rstStack',
@@ -31,7 +33,7 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                           ),
                           envir = environment())
 
-  superRaster<-parallel::parLapply(setNames(smpCl,smpCl),function(smp){
+  superRaster<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
     if (!is.null(fn_derivedRaster)){
       superRaster<-raster::stack(fn_raster[[smp]],fn_derivedRaster[[smp]])
     } else {
@@ -40,7 +42,7 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
     return(superRaster)
   },cl=cl)
 
-  classMask<-parallel::parLapply(setNames(smpCl,smpCl),function(smp){
+  classMask<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
     out<-lapply(setNames(fn_label,fn_label),function(lbl){
 
       lvls<-raster::levels(fn_rstStack[[smp]][[fn_layerLabel]])[[1]]
@@ -74,7 +76,7 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                             'fn_prefix'),
                           envir = environment())
 
-  classOut<-parallel::parLapply(setNames(smpCl,smpCl),function(smp){
+  classOut<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
 
     labelOut<-lapply(setNames(fn_label,fn_label),function(lbl){
 
@@ -136,7 +138,7 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
     return(outStk)
   },cl = cl)
 
-  parallel::stopCluster(cl)
+
 
   lapply(setNames(smpCl,smpCl),function(smp){
     out<-lapply(setNames(fn_label,fn_label),function(lbl){

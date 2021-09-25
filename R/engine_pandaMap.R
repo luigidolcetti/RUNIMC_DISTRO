@@ -128,6 +128,9 @@ pandaMap<-function (fn_srt=NULL,
       'maxii',
       'drct',
       'fn_lowerAreaLimit'),envir = environment())
+    on.exit(expr = {
+      if (exists('cl')) parallel::stopCluster(cl)
+    })
   } else {
     cl<-NULL
   }
@@ -665,7 +668,9 @@ pandaMap<-function (fn_srt=NULL,
 
   rm(newSrt)
 
-  if (!is.null(cl)) parallel::stopCluster(cl)
+  if (!is.null(cl)) {
+    parallel::stopCluster(cl)
+    rm(cl)}
 
   if (length(MULTIOUT)==1) {
     out<-MULTIOUT[[1]]
@@ -739,7 +744,7 @@ pandaMap<-function (fn_srt=NULL,
   MULTIOUT_TOP_Match<-sf::st_contains(MULTIOUT_TOP)
 
   PM_polyIN<-unique(unlist(lapply(MULTIOUT_TOP_Match,'[',1),recursive = T))
-  # browser()
+  #
   #   PM_polyIN<-unique(unlist(lapply(MULTIOUT_TOP_Match,function(x){
   #     area<-sf::st_area(MULTIOUT_TOP[x,])
   #     warea<-which.max(area)[1]

@@ -4,7 +4,7 @@
 \alias{mdfObjectAttr}
 \title{Modify object attributes}
 \usage{
-mdfObjectAttr(x, crtnTimeStmp, mdtnTimeStmp, artnTimeStmp, fileArchive)
+mdfObjectAttr(x, crtnTimeStmp, mdtnTimeStmp, artnTimeStmp, fileArchive, sealed)
 }
 \arguments{
 \item{x}{an object}

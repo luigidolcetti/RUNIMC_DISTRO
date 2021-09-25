@@ -12,5 +12,6 @@ initObjectAttr<-function(x){
   attr(x,'mdtnTimeStmp')<-crtnTimeStmp
   attr(x,'artnTimeStmp')<-NA
   attr(x,'fileArchive')<-NA
+  attr(x,'sealed')<-F
   return(x)
 }

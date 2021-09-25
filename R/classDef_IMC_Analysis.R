@@ -1,5 +1,9 @@
+#' IMC_Analysis
 #'
-IMC_StudyTable<-setClass('IMC_Analysis',
+#' Analysis class is actually an environment containing various objects used
+#' within a study
+#' @export
+IMC_Analysis<-setClass('IMC_Analysis',
                          contains = 'environment')
 
 setMethod('initialize','IMC_Analysis',

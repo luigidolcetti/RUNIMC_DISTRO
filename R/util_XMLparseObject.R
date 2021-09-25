@@ -14,7 +14,8 @@ XMLparseObject<-function(x=NULL,objectType=NULL){
                                   crtnTimeStmp=attr(x,'crtnTimeStmp'),
                                   mdtnTimeStmp=attr(x,'mdtnTimeStmp'),
                                   artnTimeStmp=attr(x,'artnTimeStmp'),
-                                  fileArchive=attr(x,'fileArchive')),
+                                  fileArchive=attr(x,'fileArchive'),
+                                  sealed = attr(x,'sealed')),
                         doc = xmlDoc)
   objectS<-sapply(slts,function(s){
 
@@ -25,6 +26,7 @@ XMLparseObject<-function(x=NULL,objectType=NULL){
     mdtnTimeStmp<-attr(instObj,'mdtnTimeStmp')
     artnTimeStmp<-attr(instObj,'artnTimeStmp')
     fileArchive<-attr(instObj,'fileArchive')
+    sealed <- attr(x,'sealed')
     if (any(class(instObj)=='character')) content<-paste0(instObj,collapse = ",") else content<-fileArchive
     XML::newXMLNode(s,
                     content,
@@ -32,7 +34,8 @@ XMLparseObject<-function(x=NULL,objectType=NULL){
                               type=sltTypeOf,
                               crtnTimeStmp=crtnTimeStmp,
                               mdtnTimeStmp=mdtnTimeStmp,
-                              artnTimeStmp=artnTimeStmp),
+                              artnTimeStmp=artnTimeStmp,
+                              sealed=sealed),
                     parent=root)
 
   },USE.NAMES = T)
