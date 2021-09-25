@@ -1,3 +1,7 @@
+#' IMC_AnalysisList
+#'
+#' Simple list containing names of analysis used within one study.
+#' @export
 IMC_AnalysisList<-setClass('IMC_AnalysisList',
                            contains = 'list')
 

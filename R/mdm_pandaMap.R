@@ -13,7 +13,7 @@ mdm_pandaMap<-function(x,labelLayer,uids,mthd,mthdPrmtrs){
   polygonsList<-lapply(rstNames, function(rst){
     out<-lapply(setNames(labelLayer,labelLayer),function(i){
 
-      mrkr<-tf_labelList(x$currentAnalysis$trainingFeatures)
+      mrkr<-tf_parLabelList(x$currentAnalysis$trainingFeatures)
       mrkr<-setNames(mrkr,mrkr)
       mrkrIndex<-which(vapply(mrkr,function(x)grepl(x,i),logical(1),USE.NAMES = T))
 

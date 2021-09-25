@@ -1,3 +1,7 @@
+#' IMC_Classifier
+#'
+#' Container list for classification and regression models
+#' @export
 IMC_Classifier<-setClass('IMC_Classifier',
                          contains = 'list')
 

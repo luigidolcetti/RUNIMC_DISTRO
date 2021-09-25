@@ -4,6 +4,7 @@ methodParametersClassification<-list(
     responseVariable = 'label',
     predictiveFeatures = NULL ,
     PvalueTreshold=0,
+    eventNumbers=NULL,
     ntree = NULL,
     mtry = NULL,
     max = NULL,

@@ -241,9 +241,9 @@ setMethod('tf_perimeterStatistics',signature(x='environment'),
 #####-------------------------------------------------------
 
 .labelList<-function(fn_trainingFeatures){
-  if (class(fn_trainingFeatures@geometry$label)=='factor'){
-    out<-levels(fn_trainingFeatures@geometry$label)} else {
-      out<-unique(fn_trainingFeatures@geometry$label)
+  if (class(fn_trainingFeatures@value$label)=='factor'){
+    out<-levels(fn_trainingFeatures@value$label)} else {
+      out<-unique(fn_trainingFeatures@value$label)
     }
   return(out)
 }
@@ -281,6 +281,46 @@ setMethod('tf_labelList',signature(x='environment'),
             }
           })
 
+.parLabelList<-function(fn_trainingFeatures){
+  if (class(fn_trainingFeatures@value$parLabel)=='factor'){
+    out<-levels(fn_trainingFeatures@value$parLabel)} else {
+      out<-unique(fn_trainingFeatures@value$parLabel)
+    }
+  return(out)
+}
+
+#' Training features
+#'
+#' Lists labels present in the training features table
+#'
+#' @param x environment, IMC_TrainingFeatures, a study or the object storing training features
+#' @return numeric vector
+#' @export
+setGeneric("tf_parLabelList", function(x,...)
+  standardGeneric("tf_parLabelList"))
+
+
+setMethod('tf_parLabelList',signature(x='IMC_TrainingFeatures'),
+          function(x){
+            .parLabelList(x)
+          })
+
+setMethod('tf_parLabelList',signature(x='environment'),
+          function(x){
+
+            if (!is.null(x$currentAnalysis$trainingFeatures)){
+              out<-.parLabelList(x$currentAnalysis$trainingFeatures)
+              return(out)
+
+            } else {
+
+              if (!is.null(x$trainingFeatures)){
+                out<-.parLabelList(x$trainingFeatures)
+                return(out)} else {
+                  stop(mError("couldn't find any training featurs"))
+                }
+            }
+          })
 
 #####-------------------------------------------------------
 

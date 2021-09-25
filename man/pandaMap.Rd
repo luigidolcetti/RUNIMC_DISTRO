@@ -16,7 +16,8 @@ pandaMap(
   fn_movingWindow_dim = NULL,
   fn_movingWindow_overlap = 25:50,
   fn_cores = parallel::detectCores(logical = T) - 1,
-  fn_verbose = F
+  fn_verbose = F,
+  fn_TempFile = NULL
 )
 }
 \description{

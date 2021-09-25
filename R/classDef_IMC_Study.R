@@ -136,11 +136,10 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$studyTable,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$studyTable,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$studyTable,'artnTimeStmp')<-newTimeStmp
-               attr(x$studyTable,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$studyTable,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Study table archived\n'))
              } else {
                if (verbose) cat(mWarning('Study table not archived\n'))
@@ -151,29 +150,27 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$channels,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$channels,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$channels,'artnTimeStmp')<-newTimeStmp
-               attr(x$channels,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$channels,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Channel table archived\n'))
              } else {
                if (verbose) cat(mWarning('Channel table not archived\n'))
              }
            },
            FilterFrame = {
-             fpn<-file.path(x$currentAnalysis$folder,'archive','ClassificationDirectives.RDS')
+             fpn<-file.path(x$currentAnalysis$folder,'archive','filters.RDS')
              out<-archiveRDS(x$currentAnalysis$filters,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$filters,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$filters,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$filters,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Filter frame archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$filters,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Filter table archived\n'))
              } else {
-               if (verbose) cat(mWarning('Filter frame not archived\n'))
+               if (verbose) cat(mWarning('Filter table not archived\n'))
              }
            },
            ClassificationDirectives = {
@@ -181,14 +178,13 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$classificationDirectives,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$classificationDirectives,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$classificationDirectives,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$classificationDirectives,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$classificationDirectives,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Classification directives archived\n'))
              } else {
-               if (verbose) cat(mWarning('Classification Directives not archived\n'))
+               if (verbose) cat(mWarning('classification directives not archived\n'))
              }
            },
            Classifier = {
@@ -196,11 +192,10 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$classifier,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$classifier,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$classifier,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$classifier,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$classifier,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Classifier archived\n'))
              } else {
                if (verbose) cat(mWarning('Classifier not archived\n'))
@@ -211,14 +206,13 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$extractionDirectives,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$extractionDirectives,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$extractionDirectives,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$extractionDirectives,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Classification directives archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$extractionDirectives,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Extraction directives archived\n'))
              } else {
-               if (verbose) cat(mWarning('Classification Directives not archived\n'))
+               if (verbose) cat(mWarning('Extraction directives not archived\n'))
              }
            },
            TrainingFeatures = {
@@ -226,14 +220,13 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$trainingFeatures,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$trainingFeatures,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$trainingFeatures,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$trainingFeatures,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Classification directives archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$trainingFeatures,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Training features table archived\n'))
              } else {
-               if (verbose) cat(mWarning('Classification Directives not archived\n'))
+               if (verbose) cat(mWarning('Training features table not archived\n'))
              }
            },
            SegmentationDirectives = {
@@ -241,14 +234,13 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$segmentationDirectives,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$segmentationDirectives,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$segmentationDirectives,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$segmentationDirectives,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$segmentationDirectives,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Segmentation directives archived\n'))
              } else {
-               if (verbose) cat(mWarning('Segmentation Directives not archived\n'))
+               if (verbose) cat(mWarning('Segmentation directives not archived\n'))
              }
            },
            Segmentation = {
@@ -256,14 +248,13 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$segmentation,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$segmentation,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$segmentation,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$segmentation,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Segmentation archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$segmentation,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Segmentation list archived\n'))
              } else {
-               if (verbose) cat(mWarning('Segmentation not archived\n'))
+               if (verbose) cat(mWarning('Segmentation list not archived\n'))
              }
            },
            InterpretationMatrix = {
@@ -271,29 +262,28 @@ setMethod("archive","IMC_Study",function(x,
              out<-archiveRDS(x$currentAnalysis$interpretationMatrix,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$interpretationMatrix,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$interpretationMatrix,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$interpretationMatrix,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$interpretationMatrix,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Interpretation matrix archived\n'))
              } else {
                if (verbose) cat(mWarning('Interpretation matrix not archived\n'))
              }
            },
            Expres = {
+
              fpn<-file.path(x$currentAnalysis$folder,'archive','Expression.RDS')
              out<-archiveRDS(x$currentAnalysis$exprs,
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis$exprs,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$exprs,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis$exprs,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Expression archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis$exprs,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Expression table archived\n'))
              } else {
-               if (verbose) cat(mWarning('Expression archived\n'))
+               if (verbose) cat(mWarning('Expression table not archived\n'))
              }
            },
            Analysis = {
@@ -302,14 +292,13 @@ setMethod("archive","IMC_Study",function(x,
                              'analysis',
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x$currentAnalysis,'mdtnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis,'artnTimeStmp')<-newTimeStmp
-               attr(x$currentAnalysis,'fileArchive')<-fpn
-               if (verbose) cat(mMessage('Analysis archived\n'))
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x$currentAnalysis,ii)<-out[[ii]]
+               }
+               if (verbose) cat(mMessage('Current analisys archived\n'))
              } else {
-               if (verbose) cat(mWarning('Analysis archived\n'))
+               if (verbose) cat(mWarning('Current analysis not archived\n'))
              }
            },
            Study = {
@@ -318,11 +307,10 @@ setMethod("archive","IMC_Study",function(x,
                              'study',
                              fpn,
                              forceSave=forceSave)
-             if (out==1) {
-               newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-               attr(x,'mdtnTimeStmp')<-newTimeStmp
-               attr(x,'artnTimeStmp')<-newTimeStmp
-               attr(x,'fileArchive')<-fpn
+             if (out$r==1) {
+               for (ii in names(out)[-1]){
+                 attr(x,ii)<-out[[ii]]
+               }
                if (verbose) cat(mMessage('Study archived\n'))
              } else {
                if (verbose) cat(mWarning('Study archived\n'))

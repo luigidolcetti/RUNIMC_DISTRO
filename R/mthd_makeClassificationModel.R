@@ -24,14 +24,34 @@ setMethod('makeClassificationModel',signature = ('IMC_Study'),
             switch(method,
 
                    randomForest = {
+
                      set.seed=seed
                      rVar<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$responseVariable
                      pFtr<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$predictiveFeatures
                      cPrm<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters[!(names(x$currentAnalysis$classificationDirectives[[method]]@methodParameters) %in%c('responseVariable','predictiveFeatures'))]
                      cPrm<-cPrm[unlist(lapply(cPrm,function(x) !is.null(x)))]
-                     fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
-                     rFcall<-c(list(formula = fFormula,
-                                    data = x$currentAnalysis$trainingFeatures@value),
+                     # fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
+                     if (is.null(x$currentAnalysis$classificationDirectives[[method]]@methodParameters$eventNumbers)){
+                       newData<-x$currentAnalysis$trainingFeatures@value[,c(rVar,pFtr),drop=F]
+                     } else {
+                       eNnms<-names(x$currentAnalysis$classificationDirectives[[method]]@methodParameters$eventNumbers)
+                       rVarNms<-unique(x$currentAnalysis$trainingFeatures@value[,rVar])
+                       if (!all(rVarNms %in% eNnms)) stop(mError('some label do not match names in number of events'))
+                       newData<-lapply(eNnms,function(en){
+
+                         Nout<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$eventNumbers[en]
+                         out<-x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value[,rVar]==en,c(rVar,pFtr),drop=F]
+                         Nin<-nrow(out)
+                         if (Nin>Nout){
+                           idN<-sample(1:Nin,Nout)
+                           out<-out[idN,]
+                         }
+                         return(out)
+                       })
+                       newData<-do.call(rbind.data.frame,newData)
+                     }
+                     rFcall<-c(list(x = newData[,pFtr],
+                                    y = newData[,rVar]),
                                cPrm)
                      rf_classifier <- do.call(randomForest::randomForest,rFcall)
 
@@ -43,15 +63,16 @@ setMethod('makeClassificationModel',signature = ('IMC_Study'),
                      pFtr<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters$predictiveFeatures
                      cPrm<-x$currentAnalysis$classificationDirectives[[method]]@methodParameters[!(names(x$currentAnalysis$classificationDirectives[[method]]@methodParameters) %in%c('responseVariable','predictiveFeatures','labels','classificationLyr','prefix'))]
                      cPrm<-cPrm[unlist(lapply(cPrm,function(x) !is.null(x)))]
-                     fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
-                     rf_classifier<-sapply(Lvar,function(lbl){
+                     # fFormula<-eval(parse(text=paste0(rVar,'~',paste(pFtr,collapse = '+'))))
+                     rf_classifier<-lapply(setNames(Lvar,Lvar),function(lbl){
                        cat('Random Forest...:::',lbl,':::\n')
-                       rFcall<-c(list(formula = fFormula,
-                                      data = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,]),
+
+                       rFcall<-c(list(x = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,pFtr],
+                                      y = x$currentAnalysis$trainingFeatures@value[x$currentAnalysis$trainingFeatures@value$parLabel==lbl,rVar]),
                                  cPrm)
                        rf<-do.call(randomForest::randomForest,rFcall)
                        return(rf)
-                     },USE.NAMES = T,simplify = F)
+                     })
                    },
                    stop(mError('unknown method')))
 

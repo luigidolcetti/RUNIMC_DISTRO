@@ -739,7 +739,7 @@ pandaMap<-function (fn_srt=NULL,
   MULTIOUT_TOP_Match<-sf::st_contains(MULTIOUT_TOP)
 
   PM_polyIN<-unique(unlist(lapply(MULTIOUT_TOP_Match,'[',1),recursive = T))
-  # browser()
+  #
   #   PM_polyIN<-unique(unlist(lapply(MULTIOUT_TOP_Match,function(x){
   #     area<-sf::st_area(MULTIOUT_TOP[x,])
   #     warea<-which.max(area)[1]

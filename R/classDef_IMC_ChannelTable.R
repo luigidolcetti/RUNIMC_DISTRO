@@ -1,5 +1,7 @@
-
+#' IMC_ChannelTable
 #'
+#' Data frame containing information regarding channel and markers names
+#' @export
 IMC_ChannelTable<-setClass('IMC_ChannelTable',
                            contains = 'data.frame')
 

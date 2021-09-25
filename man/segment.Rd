@@ -4,7 +4,7 @@
 \alias{segment}
 \title{Segment}
 \usage{
-segment(x, labelLayer = "label", ...)
+segment(x, labelLayer = "label", uids = st_uids(x), ...)
 }
 \arguments{
 \item{x}{IMC_study, a study}

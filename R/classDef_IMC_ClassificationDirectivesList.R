@@ -1,3 +1,7 @@
+#' IMC_ClassificationDirectivesList
+#'
+#' Container list for IMC_ClassificationDirectives
+#' @export
 IMC_ClassificationDirectivesList<-setClass('IMC_ClassificationDirectivesList',
                                            contains = 'list')
 

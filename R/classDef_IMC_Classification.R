@@ -1,3 +1,8 @@
+#' IMC_Classification
+#'
+#' List-like object containing all the sample IMC_RasterStacks for classification
+#' purpose
+#' @export
 IMC_Classification<-setClass('IMC_Classification',
                              contains = 'list')
 
