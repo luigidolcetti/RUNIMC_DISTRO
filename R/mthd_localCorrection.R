@@ -73,6 +73,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
             if (!is.na(cl)){
 
               cl<-parallel::makeCluster(cl)
+              on.exit( parallel::stopCluster(cl))
               parallel::clusterExport(cl,
                                       varlist = c(
                                         'oldStk',
@@ -81,7 +82,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                                         'pdv'),
                                       envir = environment())
 
-              newStk<-parallel::parLapply(setNames(uids,uids),function(i){
+              newStk<-pbapply::pblapply(setNames(uids,uids),function(i){
 
                 rst<-oldStk[[i]][[labelLayer]]
                 filePath<-raster::filename(rst)
@@ -127,7 +128,7 @@ setMethod('localCorrection',signature = ('IMC_Study'),
                 return(rstrStk)
               },cl=cl)
 
-              parallel::stopCluster(cl)
+
             } else {
 
               newStk<-lapply(setNames(uids,uids),function(i){

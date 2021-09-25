@@ -128,6 +128,9 @@ pandaMap<-function (fn_srt=NULL,
       'maxii',
       'drct',
       'fn_lowerAreaLimit'),envir = environment())
+    on.exit(expr = {
+      if (exists('cl')) parallel::stopCluster(cl)
+    })
   } else {
     cl<-NULL
   }
@@ -665,7 +668,9 @@ pandaMap<-function (fn_srt=NULL,
 
   rm(newSrt)
 
-  if (!is.null(cl)) parallel::stopCluster(cl)
+  if (!is.null(cl)) {
+    parallel::stopCluster(cl)
+    rm(cl)}
 
   if (length(MULTIOUT)==1) {
     out<-MULTIOUT[[1]]

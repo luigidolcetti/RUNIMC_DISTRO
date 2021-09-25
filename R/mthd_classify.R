@@ -29,6 +29,7 @@ setMethod('classify',signature = ('IMC_Study'),
 
                      if (!is.na(cl)){
                        cl<-parallel::makeCluster(cl)
+                       on.exit(parallel::stopCluster(cl = cl))
 
                        parallel::clusterExport(cl = cl,
                                                varlist = c(
@@ -49,7 +50,7 @@ setMethod('classify',signature = ('IMC_Study'),
                                                envir = x$currentAnalysis)
 
 
-                       TEST_monkey<-parallel::parLapply(setNames(uids,uids),function(uid){
+                       TEST_monkey<-pbapply::pblapply(setNames(uids,uids),function(uid){
                          rst<-list(raster[[uid]],derivedRasters[[uid]])
                          rstrStk<-IMC_stack(x = rst,
                                             uid = raster[[uid]]@uid,
@@ -77,7 +78,7 @@ setMethod('classify',signature = ('IMC_Study'),
                                           fn_uid = uid,
                                           fn_TempPath = tempPath)},cl = cl)
 
-                       parallel::stopCluster(cl = cl)
+
                      } else {
 
                      TEST_monkey<-sapply(uids,function(uid){

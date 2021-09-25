@@ -88,11 +88,11 @@ setMethod('addFilter',signature = ('IMC_Study'),
 #' }
 #'
 #' @export
-setGeneric("deployFilters", function(x,cl=NULL, ...)
+setGeneric("deployFilters", function(x,cl=NA, ...)
   standardGeneric("deployFilters"))
 
 setMethod('deployFilters',signature = ('IMC_Study'),
-          function(x,cl=NULL,...){
+          function(x,cl=NA,...){
 
 
             oldRstk<-list.files(file.path(x$currentAnalysis$folder,'rasterStacks'),full.names = T,recursive = F)
@@ -103,7 +103,7 @@ setMethod('deployFilters',signature = ('IMC_Study'),
 
 
             ff<-x$currentAnalysis$filters
-            if (is.null(cl)){
+            if (is.na(cl)){
               derivedRasters<-apply(X = ff,
                                     MARGIN = 1,
                                     FUN = function(fltDf){
@@ -115,13 +115,13 @@ setMethod('deployFilters',signature = ('IMC_Study'),
                                     })
             } else {
 
-
+              cl<-parallel::makeCluster(cl)
 
               parallel::clusterExport(cl=cl,
                                       varlist = c('raster'),
                                       envir=x)
 
-              derivedRasters<-parallel::parApply(X = ff,
+              derivedRasters<-pbapply::pbapply(X = ff,
                                                  MARGIN = 1,
                                                  FUN = function(fltDf){
                                                    imageRFilter(fn_rasterStack = raster,
@@ -131,14 +131,14 @@ setMethod('deployFilters',signature = ('IMC_Study'),
                                                                 fn_pathToFile = x$currentAnalysis$folder)
                                                  },
                                                  cl = cl)
-
+              on.exit(parallel::stopCluster(cl=cl))
             }
 
 
 
             rstNms<-Reduce('=',lapply(derivedRasters,names))
             derivedRasters<-unlist(derivedRasters,recursive=F)
-            derivedRasters<-sapply(rstNms,function(x){
+            derivedRasters<-lapply(setNames(rstNms,rstNms),function(x){
               rasterStackList<-derivedRasters[rstNms==x]
 
 
@@ -151,20 +151,21 @@ setMethod('deployFilters',signature = ('IMC_Study'),
               bioGroup<-Reduce('=',lapply(rasterStackList,slot,'bioGroup'))
               channels<-Reduce('=',lapply(rasterStackList,slot,'channels'))
               out<-IMC_stack(rasterStackList,
-                        uid,
-                        IMC_text_file,
-                        study,
-                        sample,
-                        replicate,
-                        ROI,
-                        bioGroup,
-                        channels,
-                        type = 'calc')
+                             uid,
+                             IMC_text_file,
+                             study,
+                             sample,
+                             replicate,
+                             ROI,
+                             bioGroup,
+                             channels,
+                             type = 'calc')
 
-              },USE.NAMES = T)
+            })
 
+            newNames<-names(derivedRasters)
 
-            derivedRasters<-sapply(names(derivedRasters),function(nms){
+            derivedRasters<-lapply(setNames(newNames,newNames),function(nms){
 
               fpt<-file.path(x$currentAnalysis$folder,
                              'rasterStacks',
@@ -180,7 +181,7 @@ setMethod('deployFilters',signature = ('IMC_Study'),
 
               return(out)
 
-            },USE.NAMES = T,simplify = F)
+            })
 
 
             derivedRasters<-new('IMC_RsCollection',derivedRasters)
