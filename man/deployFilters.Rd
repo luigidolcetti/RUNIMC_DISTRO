@@ -4,7 +4,7 @@
 \alias{deployFilters}
 \title{Apply filters}
 \usage{
-deployFilters(x, cl = NULL, ...)
+deployFilters(x, cl = NA, ...)
 }
 \arguments{
 \item{x}{IMC_Study, a study.}
