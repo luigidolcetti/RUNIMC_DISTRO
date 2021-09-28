@@ -737,6 +737,29 @@ pandaMap<-function (fn_srt=NULL,
 
 
   wo<-sapply(MULTIOUT_TOP,function(x)ifelse(nrow(x)==0,F,T),simplify = T,USE.NAMES = F)
+
+  if (!any(wo)){
+    org<-raster::extent(fn_srt)
+    out<-sf::st_sf(uid=fn_uid,
+              splitp_id = paste0(fn_primaryIndex,'.0.0.0.0'),
+              primary_id = fn_primaryIndex,
+              tile_id = 0,
+              iland_id = 0,
+              clade_id = 0,
+              level_id = 0,
+              area=0,
+              geom = sf::st_sfc(sf::st_polygon(list(matrix(c(org[1],org[3],
+                                                      org[1]+1,org[3],
+                                                      org[1]+1,org[3]+1,
+                                                      org[1],org[3]+1,
+                                                      org[1],org[3]),
+                                               ncol=2,
+                                               byrow = T)))))
+
+    sf::write_sf(out,file.path(fn_TempFile,paste0('TEMP_POLY_',fn_uid,'_',fn_primaryIndex,'.sqlite')),append = F)
+    return(out)
+  }
+
   MULTIOUT_TOP<-MULTIOUT_TOP[wo]
 
   MULTIOUT_TOP<-do.call(dplyr::bind_rows,MULTIOUT_TOP)
