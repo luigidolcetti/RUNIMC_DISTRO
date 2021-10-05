@@ -103,15 +103,25 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
         filePath<-raster::filename(fn_rstStack[[smp]][[fn_layerLabel]])
         filePath<-DescTools::SplitPath(filePath)
         fileObjective<-file.path(filePath$drive,filePath$dirname,paste0(fn_prefix,lbl,'.',filePath$extension))
+        filePathTEMP<-file.path(fn_analysisFolder,'Temp')
 
         outRst<-raster::predict(maskedRaster,
                                 fn_classifiers[[lbl]],
                                 na.rm=T,
-                                filename = fileObjective,
+                                filename = file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.',filePath$extension)),
                                 overwrite=T,
                                 format='raster')
 
         names(outRst)<-paste0(fn_prefix,lbl)
+
+        outRst<-raster::writeRaster(x =outRst,
+                                    filename = fileObjective,
+                                    overwrite=T,
+                                    format='raster')
+
+        unlink(file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.grd')))
+        unlink(file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.gri')))
+
         unlink(raster::filename(maskedRaster))
       }
 
