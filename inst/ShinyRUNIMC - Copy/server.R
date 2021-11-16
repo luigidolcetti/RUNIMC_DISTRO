@@ -241,27 +241,12 @@ server <- function(input, output, session) {
                            value = {
                              TEMP<-min(shinyServiceEnv$rstStack[[1]]@extent[2],shinyServiceEnv$rstStack[[1]]@extent[4])
                              if (TEMP<100) {TEMP/2} else {50}}),
-        width = 3
+        width = 5
       ),
       shinydashboard::box(
         shiny::selectInput("lTrls0","Layer 0",
                            choices = shinyServiceEnv$nmsRst,
                            selected = shinyServiceEnv$nmsRst[[1]]),
-        shiny::selectInput("lTrls0_red","Red",
-                           choices = shinyServiceEnv$nmsRst,
-                           selected = NULL,
-                           multiple = T),
-        shiny::selectInput("lTrls0_green","Green",
-                           choices = shinyServiceEnv$nmsRst,
-                           selected = NULL,
-                           multiple = T),
-        shiny::selectInput("lTrls0_blue","Blue",
-                           choices = shinyServiceEnv$nmsRst,
-                           selected = NULL,
-                           multiple = T),
-        width = 2
-      ),
-      shinydashboard::box(
         shiny::selectInput("lTrls1","Layer 1",
                            choices = shinyServiceEnv$nmsRst,
                            selected = shinyServiceEnv$nmsRst[[1]]),
@@ -532,58 +517,27 @@ server <- function(input, output, session) {
 
     {
       input$sTrls
-      if (is.null(input$lTrls0_red) &
-          is.null(input$lTrls0_green) &
-          is.null(input$lTrls0_blue)){
-
-        par(oma=c(0,0,0,0),mar=c(2,2,1,1))
-        plotsPoly(fn_rst = CURRENTSTACK_TEMP$stack[[input$lTrls0]],
-                  fn_xmin = input$xTrls-input$zTrls,
-                  fn_xmax = input$xTrls+input$zTrls,
-                  fn_ymin = input$yTrls-input$zTrls,
-                  fn_ymax = input$yTrls+input$zTrls,
-                  fn_plcn = shinyServiceEnv$plcn,
-                  fn_plc = shinyServiceEnv$plc,
-                  fn_plcRange = ZBRAKES(),
-                  fn_xaxs = 'i',
-                  fn_yaxs = 'i',
-                  fn_xaxt = 's',
-                  fn_yaxt = 's',
-                  fn_colNA = shinyServiceEnv$NAcol,
-                  fn_Bx = VERTEXBUFFER$x,
-                  fn_By = VERTEXBUFFER$y,
-                  fn_bgc = GEOM$bufferColor,
-                  fn_geom = GEOM$toShow,
-                  fn_geomB = GEOM$toBorder,
-                  fn_lwd = input$lineWidth,
-                  fn_title = input$lTrls0)
-      } else {
-        par(oma=c(0,0,0,0),mar=c(2,2,1,1))
-
-        plotsPoly(fn_rst = CURRENTSTACK_TEMP$stack,
-                  fn_rst_red = input$lTrls0_red,
-                  fn_rst_green = input$lTrls0_green,
-                  fn_rst_blue = input$lTrls0_blue,
-                  fn_xmin = input$xTrls-input$zTrls,
-                  fn_xmax = input$xTrls+input$zTrls,
-                  fn_ymin = input$yTrls-input$zTrls,
-                  fn_ymax = input$yTrls+input$zTrls,
-                  fn_plcn = shinyServiceEnv$plcn,
-                  fn_plc = shinyServiceEnv$plc,
-                  fn_plcRange = ZBRAKES(),
-                  fn_xaxs = 'i',
-                  fn_yaxs = 'i',
-                  fn_xaxt = 's',
-                  fn_yaxt = 's',
-                  fn_colNA = shinyServiceEnv$NAcol,
-                  fn_Bx = VERTEXBUFFER$x,
-                  fn_By = VERTEXBUFFER$y,
-                  fn_bgc = GEOM$bufferColor,
-                  fn_geom = GEOM$toShow,
-                  fn_geomB = GEOM$toBorder,
-                  fn_lwd = input$lineWidth,
-                  fn_title = input$lTrls0)
-      }
+      par(oma=c(0,0,0,0),mar=c(3,3,1,1))
+      plotsPoly(fn_rst = CURRENTSTACK_TEMP$stack[[input$lTrls0]],
+                fn_xmin = input$xTrls-input$zTrls,
+                fn_xmax = input$xTrls+input$zTrls,
+                fn_ymin = input$yTrls-input$zTrls,
+                fn_ymax = input$yTrls+input$zTrls,
+                fn_plcn = shinyServiceEnv$plcn,
+                fn_plc = shinyServiceEnv$plc,
+                fn_plcRange = ZBRAKES(),
+                fn_xaxs = 'i',
+                fn_yaxs = 'i',
+                fn_xaxt = 's',
+                fn_yaxt = 's',
+                fn_colNA = shinyServiceEnv$NAcol,
+                fn_Bx = VERTEXBUFFER$x,
+                fn_By = VERTEXBUFFER$y,
+                fn_bgc = GEOM$bufferColor,
+                fn_geom = GEOM$toShow,
+                fn_geomB = GEOM$toBorder,
+                fn_lwd = input$lineWidth,
+                fn_title = input$lTrls0)
     })
 
   ####
@@ -850,15 +804,6 @@ server <- function(input, output, session) {
       shiny::updateSelectInput(session,"lTrls0",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = shinyServiceEnv$nmsRst[[1]])
-      shiny::updateSelectInput(session,"lTrls0_red",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
-      shiny::updateSelectInput(session,"lTrls0_green",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
-      shiny::updateSelectInput(session,"lTrls0_blue",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
       shiny::updateSelectInput(session,"lTrls1",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = shinyServiceEnv$nmsRst[[1]])
@@ -934,15 +879,6 @@ server <- function(input, output, session) {
       shiny::updateSelectInput(session,"lTrls0",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = shinyServiceEnv$nmsRst[[1]])
-      shiny::updateSelectInput(session,"lTrls0_red",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
-      shiny::updateSelectInput(session,"lTrls0_green",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
-      shiny::updateSelectInput(session,"lTrls0_blue",NULL,
-                               choices = shinyServiceEnv$nmsRst,
-                               selected = NULL)
       shiny::updateSelectInput(session,"lTrls1",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = shinyServiceEnv$nmsRst[[1]])
