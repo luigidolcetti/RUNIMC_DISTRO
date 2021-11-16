@@ -2,7 +2,7 @@
 % Please edit documentation in R/engine_spiderMap.R
 \name{spiderMap}
 \alias{spiderMap}
-\title{Segmentation engines}
+\title{spiderMap}
 \usage{
 spiderMap(
   fn_srt,
@@ -86,12 +86,8 @@ of the search parameters.}
 IMC_segmentation object
 }
 \description{
-A segmentation engine is a function used by the wrapper \code{\link[=segment]{segment()}}.
-A segmentation engine can be deployed outside the mechanism of the \code{\link[=segment]{segment()}}
-method for example if it becomes convenient to apply specific values for
-each different cell subtype.
-\code{\link[=spiderMap]{spiderMap()}} offers a basic segmentation algorithm that is highly heuristic
-because it lacks a deterministic assignment of seeds, as opposed to
-\code{\link[=ratMap]{ratMap()}} and \code{\link[=slothMap]{slothMap()}} where the seeds are determined at the classification
-level.
+This segmentation engine works directly on the multi-class map produced by
+a random forest classification, therefore it doesn't rely on any gradient
+evaluation, instead it is a guessestimation based only on geometrical
+parameters.
 }

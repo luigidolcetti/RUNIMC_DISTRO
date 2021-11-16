@@ -8,11 +8,19 @@
 #' @param fn_whichFiles numeric vector, which files should be loaded (alphabetical order as produced by list.files).
 #'   If NULL (default) all files will be loaded.
 #' @param fn_whichColumns character, can be either 'named' (default) or 'all'.
-#'   Header of the txt table will be parsed in search of names of possible markers, providing 'named',
-#'   only those columns that seem to contain a name are loaded.
+#'   Header of the txt table will be parsed in search of names of possible markers,
+#'   providing 'named', only those columns that seem to contain a name are loaded.
+#' @param fn_x_column character, name of the column containing X coordinates.
+#' @param fn_y_column character, name of the column containing Y coordinates.
+#' @param fn_nonChannelColumns character vector, names of non-data columns.
+#' @param fn_emptyChannelPattern character, regex expression of empty columns.
+#' @param fn_usedChannelPattern character, regex expression of used columns.
+#' @param fn_channelPattern character, regex expression to extract the channel name.
+#' @param fn_markerPattern character, regex expression to extract the marker name.
 #' @param fn_transpose logical, should the raster be transposed?
-#' @param fn_overwrite logical, if true and a study with the same name is present on the disk, files will be delete first.
-#'   False, produce a milder effect producing a progressive overwrite.
+#' @param fn_overwrite logical, if TRUE and a study with the same name is present
+#'   on the disk, files will be delete first. FALSE, produce a milder effect
+#'   producing a progressive overwrite.
 #' @param fn_verbose logical, describe what is going on?
 #' @return An environment containing a new study and a hierarchy of files where specified.
 #' @examples

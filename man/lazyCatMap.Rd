@@ -2,10 +2,24 @@
 % Please edit documentation in R/engine_lazyCatMap.R
 \name{lazyCatMap}
 \alias{lazyCatMap}
-\title{Some nice thing}
+\title{lazyCatMap}
 \usage{
 lazyCatMap(fn_srt = NULL, fn_uid = NULL, fn_indexToExclude = NULL)
 }
+\arguments{
+\item{fn_srt}{raster, a rater usually stored in segmentation and imported
+via \link{importTiffMask}.}
+
+\item{fn_uid}{character, uid string referring to a specific ROI.}
+
+\item{fn_indexToExclude}{numeric scalar, level that will be excluded from
+the segmentation, usually the value representing the background.}
+}
 \description{
-Some nice thing
+Simple engine function to transform a raster segmentation map (as obtained
+by other segmentation tools) in a vectorized segmentation map
+}
+\details{
+Engine function should not be used directly but instead through the
+appropriate method (e.g. \link{segment})
 }

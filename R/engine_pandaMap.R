@@ -1,6 +1,38 @@
-#'Some nice thing
+#' pandaMap - engine function
 #'
+#' Segmentation engine based on local segmentation similar to a watershed protocol
 #'
+#' @param fn_srt raster, map to be segmented, should represent some meaningful parameter
+#'   such as the position of each single pixel as predicted by the function.
+#'   [randomOnions] or [randomOnions_parallel].
+#' @param fn_uid character, uid string referring to a specific ROI.
+#' @param fn_primaryIndex character, used as primary index should correspond
+#'   to the annotation label produced via the function [runIMC].
+#' @param fn_clpDir character, shold connected pixel been searched in the 4 or 8
+#'   surrounding pixels?
+#' @param fn_brake numeric scalar, number of quantile brakes to use in subdividing the
+#'   range of values in the raster.
+#' @param fn_lowerQuantile numeric scalar, the first brake will include all the
+#'   values between 0 and the lower quantile values.
+#' @param fn_upperQuantile numeric scalar, the last brake will include all the
+#'   values between the upper quantile value and 1.
+#' @param fn_lowerAreaLimit numeric scalar, minimum area to consider a ragion as
+#'   a separate polygon.
+#' @param fn_movingWindow_dim numeric vector, acceptable dimension in pixel of
+#'   the moving window (e.g. 100:200 or c(100,120,140,180)...). Values need to be
+#'   choose accurately since a narrow window can produce artifacts whilst a window
+#'   that is too large (e.g. >400 pixels) can extended the calculation time.
+#' @param fn_movingWindow_overlap numeric vector, acceptable overlap values for
+#'   the scanning window.
+#' @param fn_cores numeric scalar, number of cores to be used in parallel calculation.
+#'   Setting cl = NULL makes the process not parallel and extra information
+#'   are displayed if verbose is TRUE.
+#' @param fn_verbose logic scalar, show information regarding the segmentation
+#'   process.
+#' @param fn_TempFile character scalar, save resulting geometry to a temporary
+#'   file.
+#' @details Engine function should not be used directly but instead through the
+#'   appropriate method (e.g. [segment])
 #' @export
 pandaMap<-function (fn_srt=NULL,
                     fn_uid = NULL,

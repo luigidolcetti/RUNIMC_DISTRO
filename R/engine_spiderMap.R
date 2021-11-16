@@ -1,13 +1,9 @@
-#'Segmentation engines
+#'spiderMap
 #'
-#'A segmentation engine is a function used by the wrapper [segment()].
-#'  A segmentation engine can be deployed outside the mechanism of the [segment()]
-#'  method for example if it becomes convenient to apply specific values for
-#'  each different cell subtype.
-#'  [spiderMap()] offers a basic segmentation algorithm that is highly heuristic
-#'  because it lacks a deterministic assignment of seeds, as opposed to
-#'  [ratMap()] and [slothMap()] where the seeds are determined at the classification
-#'  level.
+#'This segmentation engine works directly on the multi-class map produced by
+#'a random forest classification, therefore it doesn't rely on any gradient
+#'evaluation, instead it is a guessestimation based only on geometrical
+#'parameters.
 #'
 #'@param fn_srt rasterLayer, a classification discrete raster layer, as produced
 #'  by the **randomForest** classification method, that describes in a single

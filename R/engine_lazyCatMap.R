@@ -1,6 +1,14 @@
-#'Some nice thing
+#' lazyCatMap
 #'
-#'
+#' Simple engine function to transform a raster segmentation map (as obtained
+#' by other segmentation tools) in a vectorized segmentation map
+#' @param fn_srt raster, a rater usually stored in segmentation and imported
+#'  via [importTiffMask].
+#' @param fn_uid character, uid string referring to a specific ROI.
+#' @param fn_indexToExclude numeric scalar, level that will be excluded from
+#'  the segmentation, usually the value representing the background.
+#' @details Engine function should not be used directly but instead through the
+#'   appropriate method (e.g. [segment])
 #' @export
 lazyCatMap<-function (fn_srt=NULL,
                       fn_uid=NULL,
