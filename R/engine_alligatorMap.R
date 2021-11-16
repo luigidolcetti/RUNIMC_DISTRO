@@ -1,6 +1,52 @@
-#'Some nice thing
+#' alligatorMap
 #'
-#'
+#' segmentation engine function that evaluates the profile of a number of radii
+#' around seed pixels.
+#' @param fn_srt raster, map to be segmented, should represent some meaningful parameter
+#'   such as the position of each single pixel as predicted by the function.
+#'   [randomOnions] or [randomOnions_parallel].
+#' @param fn_radius numeric scalar, length of radius.
+#' @param fn_Nspikes numeric scalar, number of radii to scan.
+#' @param fn_minArea numeric scalar, minimum polygon area.
+#' @param fn_maxArea numeric scalar, maximum polygon area.
+#' @param fn_minRoundness numeric scalar, minimum polygon roundness.
+#' @param fn_maxRoundness numeric scalar, maximum polygon roundness.
+#' @param fn_coverage numeric scalar, pixel coverage threshold used to decide
+#'   whether to assign or not a pixel to a forming polygon
+#' @param fn_seedOutScore numeric scalar, maximum number of times a pixel
+#'   can be used as seed before being either included in a polygon or taken
+#'   out of the pool of considered pixels.
+#' @param fn_cycleWindow numeric scalar, number of thousand pixels to scan
+#'   before applying stringency reduction.
+#' @param fn_discoveryTreshold (not implemented).
+#' @param fn_adaptative logic scalar, apply stringency reduction (TRUE, default)
+#'   or not.
+#' @param fn_areaAdaptRate numeric scalar (0-1), rate of stringency reduction
+#'   for area constrain.
+#' @param fn_roundnessAdaptRate numeric scalar (0-1), rate of stringency reduction
+#'   for roundness constrain.
+#' @param fn_segmentAlg character, method to guess the edge of one radius, can
+#'   be sign_simple, sign_extended, or quadratic.
+#' @param fn_fusion logic scalar, try to optimize segmentation aggregating
+#'   adjacent polygons (TRUE, default).
+#' @param fn_targetArea numeric or character scalar, if numeric is the ideal
+#'   area to target when aggregating adjacent polygons. If a character is
+#'   provided that can be one among: predicted_mean, predicted_median, predicted_mode,
+#'   predicted_max, or predicted_middle, in brief the target area is calculated
+#'   from the discovered polygon accordingly to the specified statistics.
+#' @param fn_maxNetworkSize numeric scalar, maximum extension of the network
+#'   of adjacent polygons that needs to be evaluated for fusion.
+#' @param fn_inflateDeflate numeric scalar, fraction of pixel to inflate and
+#'   deflate a fusion polygon in order to fix geometrical abnormalities.
+#' @param fn_favourForeing logic scalar, variation in the edge detection, if
+#'   one radius invade an area of pixels that are not included in the pool of
+#'   pixels that are considered, the edge is forced on the edge between
+#'   considered/ foreign pixels (TRUE, default).
+#' @param fn_returnKinetic logic scalar, return a dataframe with segmentation
+#'   statistics and kinetic of polygon discovery (TRUE, can slow the segmentation
+#'   process, therefor default is set to FALSE)
+#' @param fn_returnRasters logic scalar, return a number of raster maps representing
+#'   the bitmap version of polygons and the map of included and excluded pixels.
 #' @export
 alligatorMap<-function (fn_srt,
                         fn_radius=10,

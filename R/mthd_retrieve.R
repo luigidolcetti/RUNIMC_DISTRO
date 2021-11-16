@@ -1,22 +1,15 @@
-#' Archive
+#' Retrieve
 #'
-#' Archive is used to save to disk an entire study, an Analysis or a part of it
+#' Retrieve load from disk a study, an analysis or part of it
 #'
-#' @param x a study (environment) or one of its components
-#' @param what which component of a study to archive (not implemented at the moment)
-#' @param objectReturn should the function return the object (TRUE) or the file path (FALSE)?
-#' @param forceSave each object in a study is time stamped and saving is inhibited if this object has not been modified. forceSave set to TRUE revert this behaviour
-#' @param studyTable explicitly provide the study table
-#' @return the same object after it has been written to disk or a character string representing the file path
-#' @seealso
-#' @examples
+#' @param x character, file path to a file or directory
+#' @return the object written to the specified file or the raster stacks
+#'   contained in the specified folder
 #' \dontrun{
-#' archive(x = MyStudy)
+#' myStudy <- retrieve(x = ./path/to/myStudy)
 #' }
 #' @details archive has specific methods for a study and for its elements
 #' @export
-#' @docType methods
-#' @rdname Archive-methods
 setGeneric("retrieve", function(x,...)
   standardGeneric("retrieve"))
 

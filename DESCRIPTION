@@ -45,7 +45,7 @@ Imports:
     tidyr,
     utils,
     XML
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Collate: 
     'AAA_imports.R'
@@ -105,6 +105,7 @@ Collate:
     'mthd_addExtractionDirectives.R'
     'mthd_addInterpretationMatrix.R'
     'mthd_addSegmentationDirectives.R'
+    'mthd_archive.R'
     'mthd_classify.R'
     'mthd_distilExpression.R'
     'mthd_exportTiffImage.R'

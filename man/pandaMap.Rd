@@ -2,7 +2,7 @@
 % Please edit documentation in R/engine_pandaMap.R
 \name{pandaMap}
 \alias{pandaMap}
-\title{Some nice thing}
+\title{pandaMap - engine function}
 \usage{
 pandaMap(
   fn_srt = NULL,
@@ -20,6 +20,53 @@ pandaMap(
   fn_TempFile = NULL
 )
 }
+\arguments{
+\item{fn_srt}{raster, map to be segmented, should represent some meaningful parameter
+such as the position of each single pixel as predicted by the function.
+\link{randomOnions} or \link{randomOnions_parallel}.}
+
+\item{fn_uid}{character, uid string referring to a specific ROI.}
+
+\item{fn_primaryIndex}{character, used as primary index should correspond
+to the annotation label produced via the function \link{runIMC}.}
+
+\item{fn_clpDir}{character, shold connected pixel been searched in the 4 or 8
+surrounding pixels?}
+
+\item{fn_brake}{numeric scalar, number of quantile brakes to use in subdividing the
+range of values in the raster.}
+
+\item{fn_lowerQuantile}{numeric scalar, the first brake will include all the
+values between 0 and the lower quantile values.}
+
+\item{fn_upperQuantile}{numeric scalar, the last brake will include all the
+values between the upper quantile value and 1.}
+
+\item{fn_lowerAreaLimit}{numeric scalar, minimum area to consider a ragion as
+a separate polygon.}
+
+\item{fn_movingWindow_dim}{numeric vector, acceptable dimension in pixel of
+the moving window (e.g. 100:200 or c(100,120,140,180)...). Values need to be
+choose accurately since a narrow window can produce artifacts whilst a window
+that is too large (e.g. >400 pixels) can extended the calculation time.}
+
+\item{fn_movingWindow_overlap}{numeric vector, acceptable overlap values for
+the scanning window.}
+
+\item{fn_cores}{numeric scalar, number of cores to be used in parallel calculation.
+Setting cl = NULL makes the process not parallel and extra information
+are displayed if verbose is TRUE.}
+
+\item{fn_verbose}{logic scalar, show information regarding the segmentation
+process.}
+
+\item{fn_TempFile}{character scalar, save resulting geometry to a temporary
+file.}
+}
 \description{
-Some nice thing
+Segmentation engine based on local segmentation similar to a watershed protocol
+}
+\details{
+Engine function should not be used directly but instead through the
+appropriate method (e.g. \link{segment})
 }

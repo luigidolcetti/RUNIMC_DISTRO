@@ -34,15 +34,30 @@ initStudy(
 If NULL (default) all files will be loaded.}
 
 \item{fn_whichColumns}{character, can be either 'named' (default) or 'all'.
-Header of the txt table will be parsed in search of names of possible markers, providing 'named',
-only those columns that seem to contain a name are loaded.}
+Header of the txt table will be parsed in search of names of possible markers,
+providing 'named', only those columns that seem to contain a name are loaded.}
+
+\item{fn_x_column}{character, name of the column containing X coordinates.}
+
+\item{fn_y_column}{character, name of the column containing Y coordinates.}
+
+\item{fn_nonChannelColumns}{character vector, names of non-data columns.}
+
+\item{fn_emptyChannelPattern}{character, regex expression of empty columns.}
+
+\item{fn_usedChannelPattern}{character, regex expression of used columns.}
+
+\item{fn_channelPattern}{character, regex expression to extract the channel name.}
+
+\item{fn_markerPattern}{character, regex expression to extract the marker name.}
 
 \item{fn_transpose}{logical, should the raster be transposed?}
 
 \item{fn_verbose}{logical, describe what is going on?}
 
-\item{fn_overwrite}{logical, if true and a study with the same name is present on the disk, files will be delete first.
-False, produce a milder effect producing a progressive overwrite.}
+\item{fn_overwrite}{logical, if TRUE and a study with the same name is present
+on the disk, files will be delete first. FALSE, produce a milder effect
+producing a progressive overwrite.}
 }
 \value{
 An environment containing a new study and a hierarchy of files where specified.
