@@ -86,6 +86,23 @@ server <- function(input, output, session) {
     include.dirs = F
   ))
 
+  # DEFTBLV<-shiny::reactiveValues(table=matrix(c(NA),
+  #                                             ncol= 9,
+  #                                             nrow=0,
+  #                                             dimnames = list(NULL,layers=c('Name','L0','red','green','blue','L1','L2','L3','L4'))
+  #                                               ))
+  DEFTBLV<-shiny::reactiveValues(table=data.frame(Name=vector('character',0),
+                                                  L0=vector('character',0),
+                                                  red=vector('character',0),
+                                                  green=vector('character',0),
+                                                  blue=vector('character',0),
+                                                  L1=vector('character',0),
+                                                  L2=vector('character',0),
+                                                  L3=vector('character',0),
+                                                  L4=vector('character',0),
+                                                  row.names = NULL,
+                                                  stringsAsFactors = F))
+
 
   # CURRENTSTACK<-shiny::reactiveVal(shinyServiceEnv$rstStack)
 
@@ -275,7 +292,23 @@ server <- function(input, output, session) {
                            choices = shinyServiceEnv$nmsRst,
                            selected = shinyServiceEnv$nmsRst[[1]]),
         width = 2
-      )
+      ),
+      shinydashboard::box(
+        shiny::actionButton("addDef","Add"),
+        shiny::actionButton("delDef","Delete"),
+        shiny::actionButton("appDef","Apply"),
+        width=2),
+      shinydashboard::box(
+        shiny::downloadButton('expDef','Export',icon = NULL),
+        width=1),
+      shinydashboard::box(
+        shiny::fileInput("impDef", label = NULL,
+                         multiple = FALSE,
+                         accept = ".R",width = '10%',buttonLabel = 'Import',placeholder = NULL),
+        width=1),
+      shinydashboard::box(
+        DT::DTOutput('defTbl'),
+        width = 12)
     )
   })
 
@@ -502,6 +535,73 @@ server <- function(input, output, session) {
 
   })
 
+  shiny::observeEvent(input$addDef,{
+
+    if (is.null(input$lTrls0_red))iR<-"" else iR<-input$lTrls0_red
+    if (is.null(input$lTrls0_green))iG<-"" else iG<-input$lTrls0_green
+    if (is.null(input$lTrls0_blue))iB<-"" else iB<-input$lTrls0_blue
+
+    newLine<-data.frame("",
+                        input$lTrls0,
+                        I(list(iR)),
+                        I(list(iG)),
+                        I(list(iB)),
+                        input$lTrls1,
+                        input$lTrls2,
+                        input$lTrls3,
+                        input$lTrls4)
+    colnames(newLine)<-colnames(DEFTBLV$table)
+    DEFTBLV$table<-rbind.data.frame(DEFTBLV$table,newLine)
+  })
+
+  shiny::observeEvent(input$delDef,{
+    info = input$defTbl_rows_selected
+    if (!is.null(info)) DEFTBLV$table<-DEFTBLV$table[-info,]
+  })
+
+  shiny::observeEvent(input$appDef,{
+    info = input$defTbl_rows_selected
+    if (!is.null(info)) {
+      oldLine<-DEFTBLV$table[info,,drop=F]
+
+      shiny::updateSelectInput(session,"lTrls0",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,2])
+      shiny::updateSelectInput(session,"lTrls0_red",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,3][[1]])
+      shiny::updateSelectInput(session,"lTrls0_green",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,4][[1]])
+      shiny::updateSelectInput(session,"lTrls0_blue",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,5][[1]])
+      shiny::updateSelectInput(session,"lTrls1",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,6])
+      shiny::updateSelectInput(session,"lTrls2",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,7])
+      shiny::updateSelectInput(session,"lTrls3",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,8])
+      shiny::updateSelectInput(session,"lTrls4",NULL,
+                               choices = shinyServiceEnv$nmsRst,
+                               selected = oldLine[1,9])
+
+    }
+  })
+
+  output$expDef <- shiny::downloadHandler(
+    filename = function(){"filter_def.R"},
+    content = function(file) {
+      saveRDS(DEFTBLV$table,file = file)
+    })
+
+  shiny::observeEvent(input$impDef,{
+    DEFTBLV$table<-readRDS(input$impDef$datapath)
+  })
+
   ###### Tables ######
 
   output$tableT<-DT::renderDT(LBLTBLV$polygons,
@@ -524,6 +624,14 @@ server <- function(input, output, session) {
                                              pageLength=nrow(LBLTBLV$table)))
   proxy = DT::dataTableProxy('lblTbl')
 
+  output$defTbl<-DT::renderDT(DEFTBLV$table,
+                              server = F,
+                              editable = F,
+                              option=list(bFilter=0,
+                                          bInfo=0,
+                                          bLengthChange=0,
+                                          bAutoWidth=0,
+                                          pageLength=nrow(DEFTBLV$table)))
 
   ###### Plots ######
 
