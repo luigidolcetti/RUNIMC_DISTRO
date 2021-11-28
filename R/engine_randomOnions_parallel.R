@@ -16,8 +16,8 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
   if (is.null(fn_analysisFolder)) stop (mError('analysis Folder cannot be NULL'),call. = F)
 
 
+
   smpCl<-names(fn_rstStack)
-  smpRs<-names(fn_raster)
 
   cl<-parallel::makeCluster(cl)
   on.exit(parallel::stopCluster(cl))
@@ -29,21 +29,23 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                             'fn_raster',
                             'fn_label',
                             'fn_layerLabel',
-                            'fn_analysisFolder'
-                          ),
+                            'fn_analysisFolder',
+                            'fn_classifiers',
+                            'fn_prefix'),
                           envir = environment())
 
-  superRaster<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
+  classOut<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
+
     if (!is.null(fn_derivedRaster)){
+
       superRaster<-raster::stack(fn_raster[[smp]],fn_derivedRaster[[smp]])
+
     } else {
+
       superRaster<-fn_raster[[smp]]
     }
-    return(superRaster)
-  },cl=cl)
 
-  classMask<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
-    out<-lapply(setNames(fn_label,fn_label),function(lbl){
+    labelOut<-lapply(setNames(fn_label,paste0(fn_prefix,fn_label)),function(lbl){
 
       lvls<-raster::levels(fn_rstStack[[smp]][[fn_layerLabel]])[[1]]
       rowLabels<-which(grepl(lbl,lvls$label))
@@ -55,33 +57,24 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
         fn_rstStack[[smp]][[fn_layerLabel]]==x
       })
       labelMask<-raster::stack(labelMask)
+
+      TempFile_classMask<-file.path(fn_analysisFolder,
+                                    'Temp',
+                                    paste0('TEMP_CLASS_MASK_',smp,'_',lbl,'.nc'))
+
       labelMask<-raster::calc(labelMask,
                               sum,
-                              filename = file.path(fn_analysisFolder,
-                                                   'Temp',
-                                                   paste0('TEMP_CLASS_MASK_',smp,'_',lbl,'.nc')),
+                              filename = TempFile_classMask,
                               overwrite=T)
 
-      return(labelMask)
-    })
-    return(out)
-  },cl=cl)
-
-  ##############################################
-
-  parallel::clusterExport(cl,
-                          c('superRaster',
-                            'classMask',
-                            'fn_classifiers',
-                            'fn_prefix'),
-                          envir = environment())
-
-  classOut<-pbapply::pblapply(setNames(smpCl,smpCl),function(smp){
-
-    labelOut<-lapply(setNames(fn_label,fn_label),function(lbl){
+      filePath<-raster::filename(fn_rstStack[[smp]][[fn_layerLabel]])
+      filePath<-DescTools::SplitPath(filePath)
+      fileObjective<-file.path(filePath$drive,filePath$dirname,paste0(fn_prefix,lbl,'.',filePath$extension))
+      filePathTEMP<-file.path(fn_analysisFolder,'Temp')
 
       if (is.null(fn_classifiers[[lbl]])){
-        outRst<-classMask[[smp]][[lbl]]
+
+        outRst<-labelMask
         outRst[outRst==0]<-NA
         names(outRst)<-paste0(fn_prefix,lbl)
         outRst<-raster::writeRaster(outRst,
@@ -89,26 +82,24 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                                     overwrite=T,
                                     format='raster')
       } else {
-        maskedRaster<-raster::mask(x=superRaster[[smp]],
-                                   mask = classMask[[smp]][[lbl]],
+
+        TempFile_maskedRaster<-file.path(fn_analysisFolder,
+                                         'Temp',
+                                         paste0('TEMP_PREDICT_CLASS_MASK_',smp,'_',lbl,'.nc'))
+
+        maskedRaster<-raster::mask(x=superRaster,
+                                   mask = labelMask,
                                    maskvalue=1,
                                    inverse=T,
-                                   filename=file.path(fn_analysisFolder,
-                                                      'Temp',
-                                                      paste0('TEMP_PREDICT_CLASS_MASK_',smp,'_',lbl,'.nc')),
+                                   filename=TempFile_maskedRaster,
                                    overwrite=T)
 
-        names(maskedRaster)<-names(superRaster[[smp]])
-
-        filePath<-raster::filename(fn_rstStack[[smp]][[fn_layerLabel]])
-        filePath<-DescTools::SplitPath(filePath)
-        fileObjective<-file.path(filePath$drive,filePath$dirname,paste0(fn_prefix,lbl,'.',filePath$extension))
-        filePathTEMP<-file.path(fn_analysisFolder,'Temp')
+        names(maskedRaster)<-names(superRaster)
 
         outRst<-raster::predict(maskedRaster,
                                 fn_classifiers[[lbl]],
                                 na.rm=T,
-                                filename = file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.',filePath$extension)),
+                                filename = file.path(filePathTEMP,paste0('TEMP_',smp,'_',fn_prefix,lbl,'.',filePath$extension)),
                                 overwrite=T,
                                 format='raster')
 
@@ -119,42 +110,31 @@ randomOnions_parallel<-function(fn_rstStack=NULL,
                                     overwrite=T,
                                     format='raster')
 
-        unlink(file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.grd')))
-        unlink(file.path(filePathTEMP,paste0('TEMP_',fn_prefix,lbl,'.gri')))
+        unlink(file.path(filePathTEMP,paste0('TEMP_',smp,'_',fn_prefix,lbl,'.grd')))
+        unlink(file.path(filePathTEMP,paste0('TEMP_',smp,'_',fn_prefix,lbl,'.gri')))
 
-        unlink(raster::filename(maskedRaster))
+        unlink(TempFile_classMask)
+        unlink(TempFile_maskedRaster)
       }
 
       return(outRst)
     })
 
-    names(labelOut)<-unlist(lapply(labelOut,names))
+    labelOut<-IMC_stack(x = labelOut,
+                        uid = fn_raster[[smp]]@uid,
+                        IMC_text_file = fn_raster[[smp]]@IMC_text_file,
+                        study = fn_raster[[smp]]@study,
+                        sample = fn_raster[[smp]]@sample,
+                        replicate = fn_raster[[smp]]@replicate,
+                        ROI = fn_raster[[smp]]@ROI,
+                        bioGroup = fn_raster[[smp]]@bioGroup,
+                        channels = fn_raster[[smp]]@channels,
+                        type = 'class')
 
-    for (ii in names(labelOut)){
-      fn_rstStack[[smp]][[ii]]<-labelOut[[ii]]
-
-    }
-
-    fpt<-raster::filename(fn_rstStack[[smp]])
-
-    outStk<-IMCstackSave(fn_rstStack[[smp]],fpt)
-
-    newTimeStmp<-format(Sys.time(),format="%F %T %Z", tz = Sys.timezone())
-
-    attr(outStk,'mdtnTimeStmp')<-newTimeStmp
-    attr(outStk,'artnTimeStmp')<-newTimeStmp
-    attr(outStk,'fileArchive')<-fpt
-
-    return(outStk)
+    return(labelOut)
   },cl = cl)
 
-
-
-  lapply(setNames(smpCl,smpCl),function(smp){
-    out<-lapply(setNames(fn_label,fn_label),function(lbl){
-      unlink(raster::filename(classMask[[smp]][[lbl]]))
-    })
-  })
+  classOut<-new('IMC_Classification',classOut)
 
   return(classOut)
 }

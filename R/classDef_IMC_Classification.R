@@ -21,6 +21,7 @@ setMethod('show','IMC_Classification',
               nr<-raster::nrow(o)
               ex<-raster::extent(o)
               nlyr<-raster::nlayers(o)
+              lyrNms<-names(o)
               out<-data.frame(
                 uid=o@uid,
                 ncol=nc,
@@ -30,6 +31,7 @@ setMethod('show','IMC_Classification',
                 ymin=ex[3],
                 ymax=ex[4],
                 nlyr=nlyr,
+                layers = I(list(lyrNms)),
                 stringsAsFactors = F)
             })
 

@@ -34,8 +34,5 @@ mergeIMC_stacks<-function(x,y,update=T){
   out@ROI<-x@ROI
   out@bioGroup<-x@bioGroup
   out@type<-x@type
-  out<-IMCstackSave(out,raster::filename(x))
-  attr(out,'artnTimeStmp')<-attr(y,'artnTimeStmp')
-  attr(out,'fileArchive')<-attr(y,'fileArchive')
   return(out)
 }
