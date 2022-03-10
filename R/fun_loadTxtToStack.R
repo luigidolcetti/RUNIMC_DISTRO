@@ -39,7 +39,8 @@ loadTxtToStack<-function(fn_path=NULL,
   if (!file.exists(paste(fn_path,fn_file,sep='/'))) {stop("could not find file")}
   if (is.null(fn_rasterDBPath)) {stop("Please, specifify a path for storing raster files")}
 
-  rawMatrix<-data.table::fread(paste(fn_path,fn_file,sep='/'),sep='\t',header = T,check.names = F,colClasses = 'double')
+  rawMatrix<-data.table::fread(paste(fn_path,fn_file,sep='/'),sep='\t',header = T,check.names = F,colClasses = 'character')
+  rawMatrix<-data.frame(lapply(rawMatrix,as.numeric),check.rows = F,check.names = F)
 
 
   rasterMatrix<-lapply(fn_cols,
