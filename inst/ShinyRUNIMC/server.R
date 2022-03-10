@@ -294,6 +294,9 @@ server <- function(input, output, session) {
         width = 2
       ),
       shinydashboard::box(
+        shiny::textInput(inputId = 'defName',
+                         label = 'name',
+                         value = 'name'),
         shiny::actionButton("addDef","Add"),
         shiny::actionButton("delDef","Delete"),
         shiny::actionButton("appDef","Apply"),
@@ -541,7 +544,7 @@ server <- function(input, output, session) {
     if (is.null(input$lTrls0_green))iG<-"" else iG<-input$lTrls0_green
     if (is.null(input$lTrls0_blue))iB<-"" else iB<-input$lTrls0_blue
 
-    newLine<-data.frame("",
+    newLine<-data.frame(input$defName,
                         input$lTrls0,
                         I(list(iR)),
                         I(list(iG)),
