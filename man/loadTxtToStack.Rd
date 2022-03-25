@@ -20,6 +20,7 @@ loadTxtToStack(
   fn_channel = NULL,
   fn_trsh = 0.965,
   fn_zeroOff = T,
+  fn_nThread = 1,
   fn_verbose = F
 )
 }
@@ -46,6 +47,9 @@ These information can be updated via \code{\link[=updateMetadata]{updateMetadata
 \item{fn_trsh}{quantile as the high treshold used for normalisation.}
 
 \item{fn_zeroOff}{logical whether or not to strip 0-value in the process of normalisation.}
+
+\item{fn_nThread}{numeric scalar, number of thread to use in \link[data.table:fread]{data.table::fread},
+if data.table version is <1.14.3 fn_nThread is coerced to 1}
 }
 \value{
 an IMC_RasterStack object

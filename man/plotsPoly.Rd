@@ -6,6 +6,9 @@
 \usage{
 plotsPoly(
   fn_rst,
+  fn_rst_red = NULL,
+  fn_rst_green = NULL,
+  fn_rst_blue = NULL,
   fn_xmin,
   fn_xmax,
   fn_ymin,

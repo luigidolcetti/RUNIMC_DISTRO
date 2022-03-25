@@ -19,6 +19,7 @@ initStudy(
   fn_markerPattern = "[0-9]+[A-z]+-(.+)\\\\([A-z]+[0-9]+[A-z]+\\\\)",
   fn_transpose = F,
   fn_overWrite = F,
+  fn_nThread = 1,
   fn_verbose = T,
   ...
 )
@@ -52,6 +53,9 @@ providing 'named', only those columns that seem to contain a name are loaded.}
 \item{fn_markerPattern}{character, regex expression to extract the marker name.}
 
 \item{fn_transpose}{logical, should the raster be transposed?}
+
+\item{fn_nThread}{numeric scalar, number of thread to use in \link[data.table:fread]{data.table::fread},
+if data.table version is <1.14.3 fn_nThread is coerced to 1}
 
 \item{fn_verbose}{logical, describe what is going on?}
 

@@ -131,5 +131,6 @@ Collate:
     'util_rstPlot.R'
     'util_show_default.R'
     'util_strgfObjectAttr.R'
+    'util_tifToList.R'
     'util_wiseUnlist.R'
     'var_defaults.R'

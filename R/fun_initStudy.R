@@ -21,6 +21,8 @@
 #' @param fn_overwrite logical, if TRUE and a study with the same name is present
 #'   on the disk, files will be delete first. FALSE, produce a milder effect
 #'   producing a progressive overwrite.
+#' @param fn_nThread numeric scalar, number of thread to use in [data.table::fread],
+#'   if data.table version is <1.14.3 fn_nThread is coerced to 1
 #' @param fn_verbose logical, describe what is going on?
 #' @return An environment containing a new study and a hierarchy of files where specified.
 #' @examples
@@ -49,6 +51,7 @@ initStudy<-function(fn_studyName='IMCstudy',
                     fn_markerPattern = '[0-9]+[A-z]+-(.+)\\([A-z]+[0-9]+[A-z]+\\)',
                     fn_transpose=F,
                     fn_overWrite=F,
+                    fn_nThread = 1,
                     fn_verbose=T,
                     ...){
 
@@ -155,6 +158,7 @@ initStudy<-function(fn_studyName='IMCstudy',
                                     fn_y_column = fn_y_column,
                                     fn_trsh = NULL,
                                     fn_zeroOff = NULL,
+                                    fn_nThread = fn_nThread,
                                     fn_verbose = fn_verbose,
                                     ...)
                 return(rst)})

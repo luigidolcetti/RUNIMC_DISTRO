@@ -14,7 +14,8 @@
 #' @param fn_channel IMC_ChannelTable object.
 #' @param fn_trsh quantile as the high treshold used for normalisation.
 #' @param fn_zeroOff logical whether or not to strip 0-value in the process of normalisation.
-#'
+#' @param fn_nThread numeric scalar, number of thread to use in [data.table::fread],
+#'   if data.table version is <1.14.3 fn_nThread is coerced to 1
 #' @return an IMC_RasterStack object
 #'
 #' @export
@@ -32,12 +33,14 @@ loadTxtToStack<-function(fn_path=NULL,
                          fn_channel=NULL,
                          fn_trsh=0.965,
                          fn_zeroOff=T,
+                         fn_nThread = 1,
                          fn_verbose=F){
 
   if (!all(names(fn_details) %in% c('study','sample','ROI','replicate','bioGroup'))) {stop("Please, details accepts only 'study', 'sample', 'replicate', 'ROI', 'bioGroup")}
   if (!dir.exists(fn_path)) {stop("could not find path")}
   if (!file.exists(paste(fn_path,fn_file,sep='/'))) {stop("could not find file")}
   if (is.null(fn_rasterDBPath)) {stop("Please, specifify a path for storing raster files")}
+  if (utils::packageVersion('data.table')<"1.14.3") fn_nThread <- 1
 
   rawMatrix<-data.table::fread(file = paste(fn_path,fn_file,sep='/'),
                                sep='\t',
@@ -45,7 +48,7 @@ loadTxtToStack<-function(fn_path=NULL,
                                check.names = F,
                                colClasses = 'numeric',
                                data.table = F,
-                               nThread = 1)
+                               nThread = fn_nThread)
 
   rasterMatrix<-lapply(fn_cols,
                        function(cls){
