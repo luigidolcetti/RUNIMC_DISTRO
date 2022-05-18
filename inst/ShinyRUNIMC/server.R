@@ -5,7 +5,7 @@ server <- function(input, output, session) {
   shinyServiceEnv<-new.env()
 
   shinyServiceEnv$rstPath<-list.files(system.file("shiny-bits\\ShinyRUNIMC\\demo\\PIC\\rst",
-                                                  package = "RUNIMC"),
+                                                  package = "RUNIMCTEMP"),
                                       pattern = '*.nc',
                                       full.names = T)
 
