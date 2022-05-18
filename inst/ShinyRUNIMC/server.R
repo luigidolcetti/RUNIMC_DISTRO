@@ -4,7 +4,7 @@ server <- function(input, output, session) {
   ###### Initialize service env ######
   shinyServiceEnv<-new.env()
 
-  shinyServiceEnv$rstPath<-list.files(system.file("shiny-bits\\ShinyRUNIMC\\demo\\PIC\\rst",
+  shinyServiceEnv$rstPath<-list.files(system.file("\\ShinyRUNIMC\\demo\\PIC\\rst",
                                                   package = "RUNIMCTEMP"),
                                       pattern = '*.nc',
                                       full.names = T)
