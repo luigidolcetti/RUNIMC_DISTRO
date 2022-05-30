@@ -33,6 +33,13 @@ server <- function(input, output, session) {
   shinyServiceEnv$rasterPath<-  shiny::getShinyOption('rasterPath')
   shinyServiceEnv$trainingPolygonPath<- shiny::getShinyOption('trainingPolygonPath')
   shinyServiceEnv$capFlag <- F
+  if (shiny::getShinyOption('help')==T) {
+    shinyServiceEnv$infoColor <- "color:blue"
+    shinyServiceEnv$infoTrigger <- "hover"
+  } else {
+    shinyServiceEnv$infoColor <- "color:gray"
+    shinyServiceEnv$infoTrigger <- "manual"
+  }
   options(shiny.maxRequestSize=1000*1024^2)
 
   ###### Initialize reactive values ######
@@ -77,6 +84,7 @@ server <- function(input, output, session) {
 
   UPLOADFILENAME<-shiny::reactiveVal("demo....")
   DOWNLOADFILENAME<-shiny::reactiveVal("demo....")
+  CURRENTSCHEMA<-shiny::reactiveVal("No schema...")
 
   UPLOADFILELIST<-shiny::reactiveVal(list.files(
     path = shinyServiceEnv$rasterPath,
@@ -134,48 +142,61 @@ server <- function(input, output, session) {
                                'Analysis:::',shinyServiceEnv$analysisName))
       ),
       shinydashboard::box(
+
         shiny::selectInput(inputId = "fileRasterList",
-                           label = "Available Rasters",
+                           label = htmltools::h3(span("Available pictures"),span(icon("info-circle"), id = "fileRasterList_info", style = shinyServiceEnv$infoColor)),
                            choices = c("select a raster from the list",UPLOADFILELIST()),
                            selected = NULL,
                            multiple = F),
 
-        shiny::fileInput("fileRaster", "Upload one Raster Stack",
-                         multiple = FALSE,
+        shinyBS::bsTooltip("fileRasterList_info", "Choose one sample from the list of samples available in this study",
+                           "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
 
+        shiny::fileInput(inputId = "fileRaster",
+                         label = htmltools::h3(span("Upload a sample from file"),span(icon("info-circle"), id = "fileRaster_info", style = shinyServiceEnv$infoColor)),
+                         multiple = FALSE,
                          accept = ".stk"),
 
+        shinyBS::bsTooltip("fileRaster_info", "Browse to the .stk file you want to use for annotation... the file should be relevant to this study, but you may want to have a look to a picture that it is not. You can... just remember not to save any polygon otherwise it is going to rise an error when trying to extract features.",
+                           "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
+
         shiny::verbatimTextOutput('fileUpload',placeholder = T),
+
         width = 12),
 
       shinydashboard::box(
-        shiny::fileInput("deftblUpload", "Upload label definitions",
+        shiny::fileInput(inputId = "deftblUpload",
+                         label = htmltools::h3(span("Upload label definitions"),span(icon("info-circle"), id = "deftblUpload_info", style = shinyServiceEnv$infoColor)),
                          multiple = FALSE,
                          accept = ".sqlite"),
-        width = 6),
 
-      shinydashboard::box(
-        shiny::fileInput("dldtblUpload", "Upload Polygons",
-                         multiple = FALSE,
-                         accept = ".sqlite"),
-        width = 6),
-
-      shinydashboard::box(
         downloadButton('deftbl','Download label definitions'),
-        width = 6),
 
+        shinyBS::bsTooltip("deftblUpload_info", "You may already have a table of labels, defining some features you want to upload. Otherwise you can download the current table to a file with the button below",
+                           "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
+        width = 6),
 
       shinydashboard::box(
+        shiny::fileInput(inputId = "dldtblUpload",
+                         label = htmltools::h3(span("Upload Polygons"),span(icon("info-circle"), id = "dldtblUpload_info", style = shinyServiceEnv$infoColor)),
+                         multiple = FALSE,
+                         accept = ".sqlite"),
+
         downloadButton('dldtbl','Download Polygons'),
+
+        shinyBS::bsTooltip("dldtblUpload_info", "Upload polygons already traced for this picture from an .sqlite file...(By the way It would be a very bad idea to mix polygons from different pictures). You can also save the table of polygons to a file using the button below, although it would be better doing it from the button on the next tab that make sure the file endup in the proper folder.",
+                           "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
         width = 6),
 
-      if (shiny::getShinyOption('help')){
-        shinyBS::bsTooltip("fileRasterList", "Choose one sample from the list of samples available for this study",
-                           "bottom", options = list(container = "body"))},
+      # shinydashboard::box(
+      #
+      #   width = 6),
+      #
+      #
+      # shinydashboard::box(
+      #
+      #   width = 6)
 
-      if (shiny::getShinyOption('help')){
-        shinyBS::bsTooltip("fileRaster", "Alternatively a sample can be loaded from the disk even if it's not included in the study",
-                           "bottom", options = list(container = "body"))}
     )
 
   })
@@ -186,41 +207,52 @@ server <- function(input, output, session) {
       shinyjs::useShinyjs(),
       keys::useKeys(),
       keys::keysInput("keys", shinyServiceEnv$hotKey),
+
       shinydashboard::box(
         shiny::renderText(MESSAGETOTHEPEOPLE()),
         width = 12),
+
       shinydashboard::box(
         shiny::plotOutput("plotG",
                           click='plotG_click',
                           hover =  (NULL)),
-        width = 5),
 
-      if (shiny::getShinyOption('help')){
-        shinyBS::bsTooltip("plotG", "This is the main viewport, on which you can add polygons surrounding cells of interest. (1) Mouse left-click to add a vertex. (2) Enter to close a polygon (at least 3 vertex). (3) Shift-v to dismiss the vertices and start over. (4) Shift-c to delete polygons: place one point inside each polygon to delete",
-                           "bottom", options = list(container = "body"))},
+        shinyBS::bsPopover(id = "plotG",
+                           title = "Main view port",
+                           content = "This is the main viewport, on which you can add polygons surrounding cells of interest.<br> (1) Mouse left-click to add a vertex.<br>(2) Enter to close a polygon (at least 3 vertex).<br>(3) Shift-v to dismiss the vertices and start over.<br>(4) Shift-c to delete polygons: place one point inside each polygon to delete",
+                           placement = "right",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+        width = 5),
 
       shinydashboard::box(
         shiny::plotOutput("plotT",
                           click = "plotT_click",
                           hover = (NULL)),
+
+        shinyBS::bsPopover(id = "plotT",
+                           title = "Navigation viewport",
+                           content = "Mouse left-click to change the center of the region of interest",
+                           placement = "left",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+
         width = 5
       ),
 
-      if (shiny::getShinyOption('help')){
-        shinyBS::bsTooltip("plotT", "This is the navigation viewport. Mouse left-click to change the center of the region of interest",
-                           "bottom", options = list(container = "body"))},
-
       shinydashboard::box(
-        textOutput('NofV'),
+        shiny::textOutput('NofV'),
         shiny::selectInput(inputId = 'cvrLabel',
                            label = 'coverage label',
-                           choices = c('Select a lable',LBLTBLV$table$label),
+                           choices = c('Select a label',LBLTBLV$table$label),
                            selected = NULL),
-        "On top-left image:", shiny::br(),
-        "Left Click - add point", shiny::br(),
-        "Return - complete polygon", shiny::br(),
-        "Shift-v - remove points", shiny::br(),
-        "Shift-c - remove point/polygon around point",shiny::br(),
+        h5("Current schema"),
+        htmltools::h3(htmltools::span(shiny::textOutput(outputId = "currentSchema")),style="font-style:bold"),
+        # "On top-left image:", shiny::br(),
+        # "Left Click - add point", shiny::br(),
+        # "Return - complete polygon", shiny::br(),
+        # "Shift-v - remove points", shiny::br(),
+        # "Shift-c - remove point/polygon around point",shiny::br(),
         shiny::sliderInput("lineWidth","Poly-LWD",
                            min = 0.5,
                            max = 10,
@@ -293,23 +325,43 @@ server <- function(input, output, session) {
                            selected = shinyServiceEnv$nmsRst[[1]]),
         width = 2
       ),
+      # shinydashboard::box(
+      #   shiny::textInput(inputId = 'defName',
+      #                    label = 'name',
+      #                    value = 'name'),
+      #   shiny::actionButton("addDef","Add"),
+      #   shiny::actionButton("delDef","Delete"),
+      #   shiny::actionButton("appDef","Apply"),
+      #   width=2),
+      # shinydashboard::box(
+      #   shiny::downloadButton('expDef','Export',icon = NULL),
+      #   width=1),
+      # shinydashboard::box(
+      #   shiny::fileInput("impDef", label = NULL,
+      #                    multiple = FALSE,
+      #                    accept = ".R",width = '10%',buttonLabel = 'Import',placeholder = NULL),
+      #   width=1),
       shinydashboard::box(
-        shiny::textInput(inputId = 'defName',
-                         label = 'name',
-                         value = 'name'),
+        div(style="display:inline-block",
+            shiny::textInput(inputId = 'defName',
+                             label = NULL,
+                             value = 'name',
+                             width = '300px')),
         shiny::actionButton("addDef","Add"),
+        shiny::actionButton("repDef","Replace"),
         shiny::actionButton("delDef","Delete"),
+        shiny::actionButton("upDef","MoveUp"),
+        shiny::actionButton("downDef","MoveDown"),
         shiny::actionButton("appDef","Apply"),
-        width=2),
-      shinydashboard::box(
-        shiny::downloadButton('expDef','Export',icon = NULL),
-        width=1),
-      shinydashboard::box(
-        shiny::fileInput("impDef", label = NULL,
-                         multiple = FALSE,
-                         accept = ".R",width = '10%',buttonLabel = 'Import',placeholder = NULL),
-        width=1),
-      shinydashboard::box(
+        div(style="display:inline-block",
+            shiny::downloadButton('expDef','Export',icon = NULL)),
+        div(style="display:inline-block",
+            shiny::fileInput("impDef", label = NULL,
+                             multiple = FALSE,
+                             accept = ".R",
+                             width = '20%',
+                             buttonLabel = 'Import',
+                             placeholder = NULL)),
         DT::DTOutput('defTbl'),
         width = 12)
     )
@@ -567,6 +619,7 @@ server <- function(input, output, session) {
     if (!is.null(info)) {
       oldLine<-DEFTBLV$table[info,,drop=F]
 
+      shiny::updateTextInput(session,"defName",value = oldLine[1,1])
       shiny::updateSelectInput(session,"lTrls0",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = oldLine[1,2])
@@ -591,7 +644,7 @@ server <- function(input, output, session) {
       shiny::updateSelectInput(session,"lTrls4",NULL,
                                choices = shinyServiceEnv$nmsRst,
                                selected = oldLine[1,9])
-
+      CURRENTSCHEMA(oldLine[1,1])
     }
   })
 
@@ -630,6 +683,7 @@ server <- function(input, output, session) {
   output$defTbl<-DT::renderDT(DEFTBLV$table,
                               server = F,
                               editable = F,
+                              selection = 'single',
                               option=list(bFilter=0,
                                           bInfo=0,
                                           bLengthChange=0,
@@ -638,6 +692,7 @@ server <- function(input, output, session) {
 
   ###### Plots ######
 
+  output$currentSchema<-shiny::renderText(CURRENTSCHEMA())
   output$text_out<-shiny::renderText(UPLOADFILENAME())
   output$plotG<-shiny::renderPlot(
 
