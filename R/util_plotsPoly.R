@@ -39,6 +39,7 @@ plotsPoly<-function(fn_rst,
                  yaxs=fn_yaxs,
                  xaxt=fn_xaxt,
                  yaxt=fn_yaxt,
+                 bty = 'n',
                  legend=F,
                  colNA=fn_colNA)} else
                  {
@@ -69,6 +70,7 @@ plotsPoly<-function(fn_rst,
                                fn_xmax),
                         ylim=c(fn_ymin,
                                fn_ymax),
+                        bty = 'n',
                         asp=1)
 
                    srtExt<-raster::extent(fn_rst)
@@ -88,6 +90,7 @@ plotsPoly<-function(fn_rst,
   plot(fn_geom,
        border=fn_geomB,
        lwd=fn_lwd,
+       bty ='n',
        add=T)
   title(fn_title,adj=0,line=0.3)
 }

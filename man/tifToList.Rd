@@ -9,6 +9,7 @@ tifToList(
   fn_origin = c(0, 0),
   fn_direction = c(1, 1),
   fn_resolution = c(1, 1),
+  fn_Zindex = 0,
   fn_columnNames = NULL,
   fn_targetFile = NULL,
   fn_nThread = 1,
@@ -28,6 +29,8 @@ used to determine if the picture extends left (-1) or right (+1),
 and up (+1) or down (-1).}
 
 \item{fn_resolution}{numeric vector of length two setting x and y resolution.}
+
+\item{fn_Zindex}{numeric scalar, starting number for cell indexing (Z).}
 
 \item{fn_targetFile}{character scalar, full path to the output file.}
 

@@ -1,0 +1,54 @@
+
+
+.content-wrapper,
+.right-side {
+  background-color: darkslategray;
+}
+
+.box{
+  color: ghostwhite;
+  background-color: black;
+  border: 3px;
+  border-color: darkblue;
+  margin-right: 3px;
+  margin-left: 3px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.sliderInput{
+  color: white;
+}
+
+div {
+  padding:3px !important;
+}
+
+.irs-grid-text{
+  color: white !important;
+}
+
+.irs-grid-pol{
+  color: white !important;
+}
+
+.irs-max {
+  color: white !important;
+}
+
+.irs-min {
+  color: white !important;
+}
+
+.shiny-input-container > label {
+  margin-bottom: -15px;
+}
+
+.form-contol{
+  height: auto;
+  padding: 1px;
+}
+
+.shiny-text-output{
+  font-size: 20px;
+}

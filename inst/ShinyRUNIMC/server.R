@@ -34,7 +34,7 @@ server <- function(input, output, session) {
   shinyServiceEnv$trainingPolygonPath<- shiny::getShinyOption('trainingPolygonPath')
   shinyServiceEnv$capFlag <- F
   if (shiny::getShinyOption('help')==T) {
-    shinyServiceEnv$infoColor <- "color:blue"
+    shinyServiceEnv$infoColor <- "color:gold"
     shinyServiceEnv$infoTrigger <- "hover"
   } else {
     shinyServiceEnv$infoColor <- "color:gray"
@@ -150,7 +150,9 @@ server <- function(input, output, session) {
                            multiple = F),
 
         shinyBS::bsTooltip("fileRasterList_info", "Choose one sample from the list of samples available in this study",
-                           "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
+                           "bottom",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
 
         shiny::fileInput(inputId = "fileRaster",
                          label = htmltools::h3(span("Upload a sample from file"),span(icon("info-circle"), id = "fileRaster_info", style = shinyServiceEnv$infoColor)),
@@ -174,6 +176,7 @@ server <- function(input, output, session) {
 
         shinyBS::bsTooltip("deftblUpload_info", "You may already have a table of labels, defining some features you want to upload. Otherwise you can download the current table to a file with the button below",
                            "bottom", options = list(container = "body"),trigger = shinyServiceEnv$infoTrigger),
+
         width = 6),
 
       shinydashboard::box(
@@ -223,7 +226,10 @@ server <- function(input, output, session) {
                            placement = "right",
                            options = list(container = "body"),
                            trigger = shinyServiceEnv$infoTrigger),
-        width = 5),
+
+
+        width = 5
+      ),
 
       shinydashboard::box(
         shiny::plotOutput("plotT",
@@ -241,28 +247,56 @@ server <- function(input, output, session) {
       ),
 
       shinydashboard::box(
-        shiny::textOutput('NofV'),
-        shiny::selectInput(inputId = 'cvrLabel',
-                           label = 'coverage label',
-                           choices = c('Select a label',LBLTBLV$table$label),
-                           selected = NULL),
-        h5("Current schema"),
-        htmltools::h3(htmltools::span(shiny::textOutput(outputId = "currentSchema")),style="font-style:bold"),
-        # "On top-left image:", shiny::br(),
-        # "Left Click - add point", shiny::br(),
-        # "Return - complete polygon", shiny::br(),
-        # "Shift-v - remove points", shiny::br(),
-        # "Shift-c - remove point/polygon around point",shiny::br(),
-        shiny::sliderInput("lineWidth","Poly-LWD",
-                           min = 0.5,
-                           max = 10,
-                           value = c(1),step = 0.5),
-        shiny::sliderInput("quantCap","quantile Cap",
-                           min = 0,
-                           max = 1,
-                           value = 0.996,step = 0.001),
-        shiny::actionButton(inputId = 'savePolyOTF',
-                            label = 'Seve polygons'),
+        shiny::textOutput(outputId = 'NofV'),
+        div(style=('height: 80px;padding: 0px;margin-top: 0px;'),
+            shiny::selectInput(inputId = 'cvrLabel',
+                               label = htmltools::h5(span('coverage label'),span(icon("info-circle"), id = "labelBox_info", style = shinyServiceEnv$infoColor)),
+                               choices = c('Select a label',LBLTBLV$table$label),
+                               selected = NULL)),
+        shinyBS::bsPopover(id = "labelBox_info",
+                           title = "Label selector",
+                           content = "Select a lable you want to annotate",
+                           placement = "bottom",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+        div(style=('height: 30px;padding: 0px;margin-top: 0px;'),
+            span('Current schema'),span(icon("info-circle"), id = "currentSchema_info", style = shinyServiceEnv$infoColor)),
+        shinyBS::bsPopover(id = "currentSchema_info",
+                           title = "Current Schema",
+                           content = "Refer to the bottom of this page for storing and using channel schemas",
+                           placement = "bottom",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+        # div(style=('height: 70px;padding: 0px;margin-top: 0px;  font-size: 20px;'),
+        shiny::textOutput(outputId = "currentSchema"),
+        div(style=('height: 80px;padding: 0px;margin-top: 0px;'),
+            shiny::sliderInput("lineWidth",
+                               htmltools::h5(span('Line width'),span(icon("info-circle"), id = "lineWidth_info", style = shinyServiceEnv$infoColor)),
+                               min = 0.5,
+                               max = 10,
+                               value = c(1),
+                               step = 0.5)),
+        shinyBS::bsPopover(id = "lineWidth_info",
+                           title = "Line width",
+                           content = "Change the thickness of perimeter of polygons",
+                           placement = "bottom",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+        div(style=('height: 110px;padding: 0px;margin-top: 0px;'),
+            shiny::sliderInput("quantCap",
+                               htmltools::h5(span('Contrast'),span(icon("info-circle"), id = "quantCap_info", style = shinyServiceEnv$infoColor)),
+                               min = 0,
+                               max = 1,
+                               value = 0.996,step = 0.001)),
+        shinyBS::bsPopover(id = "quantCap_info",
+                           title = "Contrast",
+                           content = "Improve the contrast cutting the brighter pixels",
+                           placement = "bottom",
+                           options = list(container = "body"),
+                           trigger = shinyServiceEnv$infoTrigger),
+        div(style=('height: 30px;padding: 0px;margin-top: 0px;'),
+            shiny::actionButton(inputId = 'savePolyOTF',
+                                label = 'Seve polygons')),
         width = 2
       ),
       shinydashboard::box(
@@ -342,27 +376,27 @@ server <- function(input, output, session) {
       #                    accept = ".R",width = '10%',buttonLabel = 'Import',placeholder = NULL),
       #   width=1),
       shinydashboard::box(
-        div(style="display:inline-block",
-            shiny::textInput(inputId = 'defName',
-                             label = NULL,
-                             value = 'name',
-                             width = '300px')),
+        htmltools::div(style="display:inline-block",
+                       shiny::textInput(inputId = 'defName',
+                                        label = NULL,
+                                        value = 'name',
+                                        width = '300px')),
         shiny::actionButton("addDef","Add"),
         shiny::actionButton("repDef","Replace"),
         shiny::actionButton("delDef","Delete"),
         shiny::actionButton("upDef","MoveUp"),
         shiny::actionButton("downDef","MoveDown"),
         shiny::actionButton("appDef","Apply"),
-        div(style="display:inline-block",
-            shiny::downloadButton('expDef','Export',icon = NULL)),
-        div(style="display:inline-block",
-            shiny::fileInput("impDef", label = NULL,
-                             multiple = FALSE,
-                             accept = ".R",
-                             width = '20%',
-                             buttonLabel = 'Import',
-                             placeholder = NULL)),
-        DT::DTOutput('defTbl'),
+        shiny::downloadButton('expDef','Export',icon = NULL),
+
+        shiny::fileInput("impDef", label = NULL,
+                         multiple = FALSE,
+                         accept = ".R",
+                         width = '20%',
+                         buttonLabel = 'Import',
+                         placeholder = NULL),
+        div(style="background-color:#ADD8E6;",
+            DT::DTOutput('defTbl')),
         width = 12)
     )
   })
@@ -381,7 +415,8 @@ server <- function(input, output, session) {
         shiny::actionButton("delPt","delete all plygons keep labels"),
         shiny::actionButton('delLblPt',"delete all labels and polygons")),
       shiny::fluidRow(
-        DT::DTOutput('lblTbl')
+        div(style="background-color:#ADD8E6;",
+            DT::DTOutput('lblTbl'))
       )
     )
   })
@@ -396,7 +431,8 @@ server <- function(input, output, session) {
                                 width = 12),
                               shinydashboard::box(
                                 shiny::actionButton('recalcStats','recalculate stats'),
-                                DT::DTOutput('tableT'),
+                                div(style="background-color:#ADD8E6;",
+                                    DT::DTOutput('tableT')),
                                 width=12
                               ),
                               width=12),
@@ -419,8 +455,7 @@ server <- function(input, output, session) {
   # })
 
 
-  #### observers #####
-  ####
+  # observers ---------------------------------------------
 
   shiny::observeEvent(input$quantCap,{
 
@@ -545,6 +580,18 @@ server <- function(input, output, session) {
       v<-LBLTBLV$table[i, j]
     }
 
+    if (j==1 && any(grepl(v,LBLTBLV$table[,1]))) {
+      whichLabel<-which(grepl(v,LBLTBLV$table[,1]))
+      shiny::showNotification(ui = 'invalid label!!!',closeButton = T,type = 'error',session = session)
+      v<-LBLTBLV$table[i, j]
+    }
+
+    if (j==1 && any(unlist(lapply(LBLTBLV$table[,1],function(x)grepl(x,v))))) {
+      whichLabel<-which(grepl(v,LBLTBLV$table[,1]))
+      shiny::showNotification(ui = 'invalid label!!!',closeButton = T,type = 'error',session = session)
+      v<-LBLTBLV$table[i, j]
+    }
+
     if (j==1){
       labelSplit<-strsplit(v,character(0))[[1]]
       labelLetters<-grepl('^[A-Za-z]+$', labelSplit)
@@ -590,6 +637,10 @@ server <- function(input, output, session) {
 
   })
 
+  #|-Population marker definition table commands =================================
+
+  #..|-AddDef ######################################
+
   shiny::observeEvent(input$addDef,{
 
     if (is.null(input$lTrls0_red))iR<-"" else iR<-input$lTrls0_red
@@ -609,11 +660,37 @@ server <- function(input, output, session) {
     DEFTBLV$table<-rbind.data.frame(DEFTBLV$table,newLine)
   })
 
+  #..|-replaceDef ######################################
+
+  shiny::observeEvent(input$repDef,{
+
+    info = input$defTbl_rows_selected
+    if (!is.null(info)){
+      if (is.null(input$lTrls0_red))iR<-"" else iR<-input$lTrls0_red
+      if (is.null(input$lTrls0_green))iG<-"" else iG<-input$lTrls0_green
+      if (is.null(input$lTrls0_blue))iB<-"" else iB<-input$lTrls0_blue
+
+      newLine<-data.frame(input$defName,
+                          input$lTrls0,
+                          I(list(iR)),
+                          I(list(iG)),
+                          I(list(iB)),
+                          input$lTrls1,
+                          input$lTrls2,
+                          input$lTrls3,
+                          input$lTrls4)
+      colnames(newLine)<-colnames(DEFTBLV$table)
+      DEFTBLV$table[info,]<-newLine[1,]
+    }
+  })
+
+  #..|-delDef #################
   shiny::observeEvent(input$delDef,{
     info = input$defTbl_rows_selected
     if (!is.null(info)) DEFTBLV$table<-DEFTBLV$table[-info,]
   })
 
+  #..|-appDef ################
   shiny::observeEvent(input$appDef,{
     info = input$defTbl_rows_selected
     if (!is.null(info)) {
@@ -648,12 +725,44 @@ server <- function(input, output, session) {
     }
   })
 
+  #..|-upDef ################
+  shiny::observeEvent(input$upDef,{
+    info <- input$defTbl_rows_selected
+    nr<- nrow(DEFTBLV$table)
+    if (!is.null(info)) {
+      if (info>1){
+        oldOrder<-1:nr
+        newOrder<-oldOrder
+        newOrder[info-1]<-info
+        newOrder[info]<-oldOrder[info-1]
+        DEFTBLV$table<-DEFTBLV$table[newOrder,,drop=F]
+      }
+    }
+  })
+
+  #..|-downDef ################
+  shiny::observeEvent(input$downDef,{
+    info <- input$defTbl_rows_selected
+    nr<- nrow(DEFTBLV$table)
+    if (!is.null(info)) {
+      if (info<nr){
+        oldOrder<-1:nr
+        newOrder<-oldOrder
+        newOrder[info+1]<-info
+        newOrder[info]<-oldOrder[info+1]
+        DEFTBLV$table<-DEFTBLV$table[newOrder,,drop=F]
+      }
+    }
+  })
+
+  #..|-Download def################
   output$expDef <- shiny::downloadHandler(
     filename = function(){"filter_def.R"},
     content = function(file) {
       saveRDS(DEFTBLV$table,file = file)
     })
 
+  #..|-Upload def##################
   shiny::observeEvent(input$impDef,{
     DEFTBLV$table<-readRDS(input$impDef$datapath)
   })
@@ -702,7 +811,7 @@ server <- function(input, output, session) {
           is.null(input$lTrls0_green) &
           is.null(input$lTrls0_blue)){
 
-        par(oma=c(0,0,0,0),mar=c(2,2,1,1))
+        par(oma=c(0,0,0,0),mar=c(2,2,1,1),bty='n',bg='black')
         plotsPoly(fn_rst = CURRENTSTACK_TEMP$stack[[input$lTrls0]],
                   fn_xmin = input$xTrls-input$zTrls,
                   fn_xmax = input$xTrls+input$zTrls,
@@ -724,7 +833,7 @@ server <- function(input, output, session) {
                   fn_lwd = input$lineWidth,
                   fn_title = input$lTrls0)
       } else {
-        par(oma=c(0,0,0,0),mar=c(2,2,1,1))
+        par(oma=c(0,0,0,0),mar=c(2,2,1,1),bty='n',bg='black',fg='white')
 
         plotsPoly(fn_rst = CURRENTSTACK_TEMP$stack,
                   fn_rst_red = input$lTrls0_red,
@@ -755,7 +864,7 @@ server <- function(input, output, session) {
   ####
   output$plotP<-shiny::renderPlot({
     input$sTrls
-    par(oma=c(0,0,0,0),mar=c(0,0,1,0))
+    par(oma=c(0,0,0,0),mar=c(0,0,1,0),bty='n',bg='black',fg='white')
     layout.matrix <- matrix(c(1,2,3,4), nrow = 2, ncol = 2)
     layout(mat = layout.matrix,
            heights = c(2, 2),
@@ -846,14 +955,15 @@ server <- function(input, output, session) {
   ###
   output$plotT<-shiny::renderPlot({
     input$sTrls
-    par(oma=c(0,0,0,0),mar=c(1,1,1,1))
+    par(oma=c(0,0,0,0),mar=c(2,2,1,1),bty='n',bg='black',fg='white')
     raster::plot(CURRENTSTACK_TEMP$stack[[input$lTrls0]],
                  col=shinyServiceEnv$plc(shinyServiceEnv$plcn),
                  breaks= ZBRAKES(),
                  asp=1,
                  xaxs="i",
                  yaxs="i",
-                 yaxt='n',
+                 xaxt="s",
+                 yaxt="s",
                  legend=F,
                  colNA=shinyServiceEnv$NAcol)
     plot(GEOM$toShow,
@@ -878,7 +988,7 @@ server <- function(input, output, session) {
 
   shiny::observeEvent(input$plotG_click,{
 
-    if(input$cvrLabel!='Select a lable'){
+    if(input$cvrLabel!='Select a label'){
       VERTEXBUFFER$x<-c(VERTEXBUFFER$x,input$plotG_click$x)
       VERTEXBUFFER$y<-c(VERTEXBUFFER$y,input$plotG_click$y)
     } else {

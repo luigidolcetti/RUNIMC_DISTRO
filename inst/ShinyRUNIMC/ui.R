@@ -12,10 +12,8 @@ ui <- shinydashboard::dashboardPage(
       shinydashboard::menuItem("Statistics", tabName = "Stats")
     )),
   shinydashboard::dashboardBody(
-    tags$head(tags$style(HTML('
-.box {margin: 2px;padding:-2px;}'
-# div {padding: 2 !important;}'
-    ))),
+    # tags$head(tags$style(HTML('.box {margin: 0px padding:-2px border: 5px solid #3DA0D1;}'))),
+    includeCSS("www/base.css"),
     shinydashboard::tabItems(
       shinydashboard::tabItem(tabName = "File",
                               uiOutput("fileControls")),
