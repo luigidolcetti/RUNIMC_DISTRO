@@ -20,9 +20,6 @@
 \arguments{
 \item{fn_Raster}{IMC_RasterStack}
 }
-\value{
-
-}
 \description{
 Export Tiff image
 }

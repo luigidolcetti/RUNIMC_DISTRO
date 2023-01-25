@@ -23,6 +23,3 @@ are read only to prevent corruption of study cross references.
 default_study<-channelTable(x = MyStudy)
 }
 }
-\seealso{
-
-}

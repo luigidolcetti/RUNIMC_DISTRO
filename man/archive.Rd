@@ -27,6 +27,3 @@ archive has specific methods for a study and for its elements
 archive(x = MyStudy)
 }
 }
-\seealso{
-
-}
